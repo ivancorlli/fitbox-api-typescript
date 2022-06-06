@@ -17,8 +17,8 @@ class MongoDb {
     static startDatabase(url) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const db = yield mongoose_1.default.connect(url, { keepAlive: true });
-                console.log(`\x1b[35m Database Connected on ${url}  \x1b[37m`);
+                const db = yield mongoose_1.default.connect(url);
+                console.log(`\x1b[35m Database Connected on ${db.connection.host}  \x1b[37m`);
                 return db;
             }
             catch (err) {

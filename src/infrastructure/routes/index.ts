@@ -1,8 +1,7 @@
-import { Request, Response, Router } from 'express'
+import { Router } from 'express'
+import UserRouter from './user.routes'
 
-const routes = Router()
-routes.get('/user', (req: Request, res: Response) => {
-  res.status(200)
-})
+const AllRoutes = Router()
+AllRoutes.use('/user', UserRouter)
 
-export { routes }
+export default AllRoutes

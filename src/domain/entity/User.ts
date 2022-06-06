@@ -1,9 +1,9 @@
 interface User {
-  id: string
+  _id: string
   email: string
   password: string
-  status: string
-  verified: boolean
+  status?: string
+  verified?: boolean
 }
 
 export default User

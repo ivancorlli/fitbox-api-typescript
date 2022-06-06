@@ -19,7 +19,7 @@ class App {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const newServer = new app_1.default(3000);
-                const url = 'fitmanager-api--dev';
+                const url = 'mongodb://localhost/fitmanager-api--dev';
                 yield newServer.listen();
                 yield database_1.default.startDatabase(url);
             }

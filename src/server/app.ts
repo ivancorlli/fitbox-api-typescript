@@ -1,5 +1,5 @@
 import express from 'express'
-import { routes } from '../routes'
+import AllRoutes from '../infrastructure/routes'
 
 class Server {
   private readonly _port: number
@@ -9,7 +9,7 @@ class Server {
     this._port = port
     this._app.use(express.urlencoded({ extended: true }))
     this._app.use(express.json())
-    this._app.use('/v1', routes)
+    this._app.use('/v1', AllRoutes)
   }
 
   listen() {

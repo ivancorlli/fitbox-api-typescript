@@ -4,8 +4,8 @@ import MongoDb from '../database'
 class App {
   static async startOn() {
     try {
-      const newServer = new Server(3000)
-      const url = 'fitmanager-api--dev'
+      const newServer = new Server(5000)
+      const url = 'mongodb://localhost/fitmanager-api--dev'
       await newServer.listen()
       await MongoDb.startDatabase(url)
     } catch (err) {

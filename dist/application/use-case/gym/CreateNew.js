@@ -10,12 +10,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 class CreateNew {
-    constructor(gymRepository) {
-        this._GymRepository = gymRepository;
+    constructor(userRepository) {
+        this._UserRepository = userRepository;
     }
     start(body) {
         return __awaiter(this, void 0, void 0, function* () {
-            const newGym = yield this._GymRepository.save(body);
+            const userExists = yield this._UserRepository.findByEmail(body.email);
+            if (userExists)
+                throw new Error('User Already Exists');
+            const newGym = yield this._UserRepository.save(body);
             return newGym;
         });
     }
