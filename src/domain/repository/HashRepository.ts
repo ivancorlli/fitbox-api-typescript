@@ -1,5 +1,5 @@
 interface HashRepository {
   createHash: (toHash: string) => Promise<string>
-  compareHash: (hash: string, compared: string) => Promise<Boolean>
+  compareHash: (compared: string, hash: string) => Promise<Boolean>
 }
 export default HashRepository

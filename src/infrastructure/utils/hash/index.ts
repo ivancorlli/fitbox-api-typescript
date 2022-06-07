@@ -8,7 +8,7 @@ class BcryptRepository implements HashRepository {
     return newHash
   }
 
-  compareHash(hash: string, compared: string) {
+  async compareHash(compared: string, hash: string) {
     const comparedHash = this._Bcrypt.compare(compared, hash)
     return comparedHash
   }

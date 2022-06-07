@@ -1,5 +1,5 @@
 interface Error {
-  code: Number
-  message: String
+  code: number
+  message: string
 }
 export default Error

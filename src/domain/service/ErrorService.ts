@@ -1,10 +1,11 @@
 import Error from '../entity/Error'
 import ErrorRepository from '../repository/ErrorRepository'
 
-class CustomError extends Error implements ErrorRepository {
-  private code: Number
+class CustomError implements ErrorRepository {
+  private code: number
+  private message: string
   constructor(message: string) {
-    super(message)
+    this.message = message
     this.code = 0
   }
 

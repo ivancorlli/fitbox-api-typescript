@@ -1,8 +1,6 @@
-import Client from '../entity/Client'
+// import Client from '../entity/Client'
+import UserRepository from './UserRepository'
 
-interface ClientRepository {
-  create: (client: Client) => Promise<Client>
-  getById: (clinetId: number) => Promise<Client>
-}
+interface ClientRepository extends UserRepository {}
 
 export default ClientRepository

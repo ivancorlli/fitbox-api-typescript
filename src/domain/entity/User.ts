@@ -1,7 +1,7 @@
 interface User {
   _id: string
   email: string
-  password: string
+  password?: string
   status?: string
   verified?: boolean
 }

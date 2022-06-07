@@ -4,7 +4,8 @@ import User from '../../../domain/entity/User'
 import { v4 as uuidv4 } from 'uuid'
 import MongoGymRepository from '../../mongo/repository/MongoGymRepository'
 import UserRepository from '../../../domain/repository/UserRepository'
-import BcryptRepository from '../../utils/bcrypt'
+import BcryptRepository from '../../utils/hash'
+import MongoClientRepository from '../../mongo/repository/MongoClientRepository'
 
 async function newUser(req: Request, res: Response, next: NextFunction) {
   // Obtenemos los datos del usuuario a crear
@@ -29,7 +30,7 @@ async function newUser(req: Request, res: Response, next: NextFunction) {
   }
   if (type === '2') {
     // Creamos un Cliente
-    UserDb = new MongoGymRepository()
+    UserDb = new MongoClientRepository()
   }
   // Instanciamos el caso de uso
   const createUser = new CreateNew(UserDb!, hashPassword)
@@ -37,10 +38,11 @@ async function newUser(req: Request, res: Response, next: NextFunction) {
     // Guardamos el nuevo usuario en base de datos
     await createUser.start(user)
     // Devolvemos una respuesta correcta
-    res.status(201).send({ ok: true, message: 'Usuario creado correctamente' })
+    return res
+      .status(201)
+      .send({ ok: true, message: 'Usuario creado correctamente' })
   } catch (err) {
-    // Envaimos el error al middelware
-    res.status(500).send({ ok: false, message: err })
+    return next(err)
   }
 }
 

@@ -1,27 +1,28 @@
 import { Schema, model } from 'mongoose'
 import User from '../../domain/entity/User'
+import { UserStatus } from '../../domain/object-value/UserStatus'
 
 const userModel = new Schema<User>(
   {
     _id: {
-      type: 'String'
+      type: String
     },
     email: {
-      type: 'String',
+      type: String,
       unique: true,
       trim: true,
       lowercase: true,
       required: true
     },
     password: {
-      type: 'String',
+      type: String,
       trim: true,
       required: true
     },
     status: {
-      type: 'String',
-      enum: ['active', 'suspended', 'inactive'],
-      default: 'active'
+      type: String,
+      enum: [UserStatus.Active, UserStatus.Inactive, UserStatus.Suspended],
+      default: UserStatus.Active
     },
     verified: {
       type: Boolean,

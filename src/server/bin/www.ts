@@ -1,11 +1,13 @@
 import Server from '../app'
 import MongoDb from '../database'
+import 'dotenv/config'
 
 class App {
   static async startOn() {
+    const port: number = parseInt(process.env.PORT!)
+    const url: string = process.env.DB!
     try {
-      const newServer = new Server(5000)
-      const url = 'mongodb://localhost/fitmanager-api--dev'
+      const newServer = new Server(port)
       await newServer.listen()
       await MongoDb.startDatabase(url)
     } catch (err) {

@@ -18,14 +18,14 @@ class CreateNew {
   // Enviamos el cuerpo del usuario a guardar
   async start(body: User) {
     // Buscamos en DDBB si el email ya se aha utilizado en otro usuario
-    const userExists = await this._UserRepository.findByEmail(body.email)
-    const Error = new CustomError('Ya existe un usuario con este email')
-    // Si existe un usuario con el email enviado devolvemos un error
-    if (userExists) throw Error.badRequest()
-
-    // Hasheamos contrasenia para guardar en DDBB
     try {
-      const hashPassword = await this._HashRepository.createHash(body.password)
+      const userExists = await this._UserRepository.findByEmail(body.email)
+      const Error = new CustomError('Ya existe un usuario con este email')
+      // Si existe un usuario con el email enviado devolvemos un error
+      if (userExists) throw Error.badRequest()
+
+      // Hasheamos contrasenia para guardar en DDBB
+      const hashPassword = await this._HashRepository.createHash(body.password!)
       body.password = hashPassword
       // Guardamos el nuevo usuario en DDBB
       const newGym: User = await this._UserRepository.save(body)
@@ -33,7 +33,7 @@ class CreateNew {
       return newGym
     } catch (err) {
       // Si existe un error lo retornamos
-      return err
+      if (err) throw err
     }
   }
 }
