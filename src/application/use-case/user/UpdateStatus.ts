@@ -1,7 +1,7 @@
 import { UserStatus } from '../../../domain/object-value/UserStatus'
 import UserRepository from '../../../domain/repository/UserRepository'
 
-class UpdateUserStatus {
+class UpdateStatus {
   private readonly _UserRepository: UserRepository
   constructor(userRepository: UserRepository) {
     this._UserRepository = userRepository
@@ -18,4 +18,4 @@ class UpdateUserStatus {
     }
   }
 }
-export default UpdateUserStatus
+export default UpdateStatus

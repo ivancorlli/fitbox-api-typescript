@@ -14,5 +14,11 @@ class MongoSessionRepository implements SessionRepository {
     const sessionFound: Session | null = await this._Session.findById(id)
     return sessionFound
   }
+
+  async deleteById(id: string): Promise<Session | null> {
+    const sessionDeleted: Session | null =
+      await this._Session.findByIdAndDelete(id)
+    return sessionDeleted
+  }
 }
 export default MongoSessionRepository

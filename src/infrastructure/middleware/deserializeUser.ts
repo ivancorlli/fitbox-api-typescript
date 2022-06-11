@@ -1,18 +1,13 @@
-import { NextFunction, Request, Response } from 'express'
+import { NextFunction, Response } from 'express'
 import { NodeStatus } from '../../config/config'
 import { CookieAge } from '../../domain/object-value/CookieAge'
 import { TokenAge } from '../../domain/object-value/TokenAge'
 import MongoSessionRepository from '../mongo/repository/MongoSessionRepository'
+import { AuthRequest, UserAuth } from '../routes/interface/Auth'
 import TokenRepository from '../utils/token'
-// import Error from '../../domain/entity/Error'
-
-interface RequireUser {
-  sid: string
-  uid: string
-}
 
 async function deserializeUser(
-  req: Request,
+  req: AuthRequest,
   res: Response,
   next: NextFunction
 ) {
@@ -41,12 +36,11 @@ async function deserializeUser(
     // Si el user de la session no coincide con el enviado en el token, no enviamos usuario
     if (session!.uid !== payload.uid) return next()
     // Definimos los parametros para el usuario
-    const user: RequireUser = {
+    const user: UserAuth = {
       sid: session!._id,
       uid: session!.uid
     }
     // Enviamos los parametros mediante un request
-    // @ts-ignore
     req.user = user
     return next()
   }
@@ -86,11 +80,10 @@ async function deserializeUser(
     })
 
     // Definimos parametros del usuario
-    const user: RequireUser = {
+    const user: UserAuth = {
       sid: refreshSession!._id,
       uid: refreshSession!.uid
     }
-    // @ts-ignore
     req.user = user
     next()
   }
