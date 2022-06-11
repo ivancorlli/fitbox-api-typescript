@@ -1,8 +1,9 @@
 import User from '../entity/User'
 interface UserRepository {
   save: (user: User) => Promise<User>
-  findByEmail: (email: string) => Promise<User | null>
-  findById: (id: string) => Promise<User | null>
+  findByEmail: (email: string) => Promise<User>
+  findById: (id: string) => Promise<User>
+  emailExists: (email: string) => Promise<null>
   updateById: (id: string, update: object) => Promise<User | null>
 }
 

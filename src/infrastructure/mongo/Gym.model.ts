@@ -1,7 +1,7 @@
 import UserModel from './User.model'
 import { Schema } from 'mongoose'
 import Gym from '../../domain/entity/Gym'
-import 'dotenv/config'
+import { UserRoles } from '../../config/config'
 
 const gymModel = new Schema<Gym>({
   profile: {
@@ -9,6 +9,6 @@ const gymModel = new Schema<Gym>({
   }
 })
 
-const key: string = process.env.GYM_ROLE!
+const key: string = UserRoles.gym!
 const gym = UserModel.discriminator(key, gymModel)
 export default gym

@@ -1,32 +1,94 @@
 import JWT from 'jsonwebtoken'
-import 'dotenv/config'
+import { AccessTokenSecret, NewTokenSecret } from '../../../config/config'
+import CustomError from '../../../domain/service/ErrorService'
+interface TokenResponse {
+  [key: string]: any
+}
+
+interface SessionToken {
+  sid: string
+  uid?: string
+}
+interface AccessTokenResponse {
+  payload: SessionToken | null
+  expired: boolean
+}
 
 interface TokenRepo {
-  createLoginToken: (payload: string | object) => Promise<string>
-  verifyLoginToken: (token: string) => Promise<object>
+  createAccessToken: (
+    payload: SessionToken,
+    expiresIn: number
+  ) => Promise<string>
+  verifyAccessToken: (token: string) => Promise<TokenResponse | undefined>
 }
 
 class TokenRepository implements TokenRepo {
   private readonly _Token = JWT
-  async createLoginToken(payload: object | string) {
+  async createAccessToken(
+    content: SessionToken,
+    expiresIn: number
+  ): Promise<string> {
     const newToken = await this._Token.sign(
-      payload,
-      process.env.PRIVATE_SECRET!,
+      content,
+      AccessTokenSecret.privateKey!,
       {
-        expiresIn: 1000,
+        expiresIn,
         algorithm: 'RS256'
       }
     )
     return newToken
   }
 
-  async verifyLoginToken(token: string) {
-    const verifyToken = await this._Token.verify(
-      token,
-      process.env.PRIVATE_SECRET!
+  async verifyAccessToken(
+    token: string
+  ): Promise<AccessTokenResponse | undefined> {
+    try {
+      // @ts-ignore
+      const tokenVerified = await this._Token.verify(
+        token,
+        AccessTokenSecret.publicKey!
+      )
+      return {
+        // @ts-ignore
+        payload: tokenVerified,
+        expired: false
+      }
+    } catch (err) {
+      return {
+        payload: null,
+        expired: true
+      }
+    }
+  }
+
+  async newToken(payload: string, expiresIn: number): Promise<string> {
+    const newToken = await this._Token.sign(
+      { payload },
+      NewTokenSecret.secret!,
+      {
+        expiresIn,
+        algorithm: 'HS256'
+      }
     )
-    return {
-      tokenData: verifyToken
+    return newToken
+  }
+
+  async verifyToken(token: string): Promise<TokenResponse | undefined> {
+    try {
+      // @ts-ignore
+      const { payload } = await this._Token.verify(
+        token,
+        NewTokenSecret.secret!
+      )
+      if (!payload) throw new Error()
+      return {
+        payload,
+        expired: false
+      }
+    } catch (err) {
+      // Instanciamos Error
+      const error = new CustomError('No estas autorizado')
+      if (err) throw error.badRequest()
     }
   }
 }

@@ -1,7 +1,7 @@
 import { Schema } from 'mongoose'
 import Client from '../../domain/entity/Client'
 import UserModel from './User.model'
-import 'dotenv/config'
+import { UserRoles } from '../../config/config'
 
 const clientModel = new Schema<Client>({
   profile: {
@@ -9,6 +9,6 @@ const clientModel = new Schema<Client>({
   }
 })
 
-const key: string = process.env.CLIENT_ROLE!
+const key: string = UserRoles.client!
 const client = UserModel.discriminator(key!, clientModel)
 export default client

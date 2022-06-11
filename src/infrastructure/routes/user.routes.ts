@@ -1,17 +1,42 @@
 import { Router } from 'express'
+import forgotPassword from '../controller/User/forgotPassword'
 import newUser from '../controller/User/newUser'
-import userChangeOldPassword from '../controller/User/userChangeOldPassword'
+import resetPassword from '../controller/User/resetPassword'
+import userChangeEmail from '../controller/User/userChangeEmail'
+import userChangePassword from '../controller/User/userChangePassword'
 import userLogin from '../controller/User/userLogin'
+import userVerification from '../controller/User/userVerification'
 import UserValidation from './middleware/User.validation'
 const UserRouter = Router()
 const Validation = new UserValidation()
 
+// ? Public Router
+// * Dont require user Athentication
 UserRouter.post(
   '/',
   Validation.userQueryValidation,
   Validation.userRegistration,
   newUser
 )
+UserRouter.post(
+  '/forgot-password',
+  Validation.forgotPasswordValidation,
+  forgotPassword
+)
 UserRouter.post('/login', Validation.userRegistration, userLogin)
-UserRouter.post('/change-old-password', userChangeOldPassword)
+UserRouter.patch('/verify/:token', userVerification)
+UserRouter.patch('/reset/:token', resetPassword)
+
+// ? Private Router
+// * Require user Authentication
+UserRouter.patch(
+  '/change-password',
+  Validation.changeOldPassValidation,
+  userChangePassword
+)
+UserRouter.patch(
+  '/change-email',
+  Validation.changeEmailValidation,
+  userChangeEmail
+)
 export default UserRouter

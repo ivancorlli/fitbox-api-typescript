@@ -1,10 +1,11 @@
 import express from 'express'
 import handleError from '../infrastructure/middleware/handleError'
 import AllRoutes from '../infrastructure/routes'
-import 'dotenv/config'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import helmet from 'helmet'
+import { CookieConfig } from '../config/config'
+import deserializeUser from '../infrastructure/middleware/deserializeUser'
 
 class Server {
   private readonly _port: number
@@ -15,9 +16,9 @@ class Server {
     this._app.use(helmet())
     this._app.use(express.urlencoded({ extended: true }))
     this._app.use(express.json())
-    this._app.use(cookieParser())
+    this._app.use(cookieParser(CookieConfig.sign))
     this._app.use(cors())
-
+    this._app.use(deserializeUser)
     this._app.use('/v1', AllRoutes)
     this._app.use(handleError)
   }

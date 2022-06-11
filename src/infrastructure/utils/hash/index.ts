@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 
 class BcryptRepository implements HashRepository {
   private readonly _Bcrypt = bcrypt
-  createHash(toHash: string) {
+  async createHash(toHash: string) {
     const newHash = this._Bcrypt.hash(toHash, 10)
     return newHash
   }

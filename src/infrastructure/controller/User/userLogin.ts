@@ -6,28 +6,77 @@ import MongoSessionRepository from '../../mongo/repository/MongoSessionRepositor
 import MongoUserRepository from '../../mongo/repository/MongoUserRepository'
 import BcryptRepository from '../../utils/hash'
 import { v4 as uuidv4 } from 'uuid'
+import TokenRepository from '../../utils/token'
+import { NodeStatus } from '../../../config/config'
+import { CookieAge } from '../../../domain/object-value/CookieAge'
+import { TokenAge } from '../../../domain/object-value/TokenAge'
 
 async function userLogin(req: Request, res: Response, next: NextFunction) {
+  // Instanciamos Repositorio de usuario
   const UserDb = new MongoUserRepository()
+  // Instanciamos Repositorio de Session
   const SessionDb = new MongoSessionRepository()
+  // INstanciamos Repositorio de Hasheo
   const hashPassword = new BcryptRepository()
+  // Instanciamos caso de uso LOGIN
   const login = new UserLogin(UserDb, hashPassword)
+  // Instanciamos caos de uso CREAR SESION
   const session = new CreateNew(SessionDb)
+  // Instanciamos repositorio para manejar tokens
+  const Token = new TokenRepository()
+  // Instanciamos repositorio para crear ID
   const ID = uuidv4()
-  const { email, password } = req.body
+  // ------------------------------------ //
   try {
+    // Obtenemos email y password del body
+    const { email, password } = req.body
+    // Inciamos caso de uso INICIAR SESION
     const user = await login.start(email, password)
+    // Definimos los parametros para la nueva session
     const Session: Session = {
       _id: ID,
       uid: user!._id
     }
+    // Creamos una nueva session
     const newSession = await session.start(Session)
-    res.cookie('accessToken', newSession, {
+    // Creamos accesstoken
+    const accessToken = await Token.createAccessToken(
+      {
+        sid: newSession!._id,
+        uid: newSession?.uid
+      },
+      TokenAge.AccessToken
+    )
+    // creamos Refresh Token
+    const refreshToken = await Token.createAccessToken(
+      {
+        sid: newSession!._id
+      },
+      TokenAge.RefreshToken
+    )
+    // Enviamos Access Cookie
+    res.cookie('accessToken', accessToken, {
+      maxAge: CookieAge.AccessCookie,
       httpOnly: true,
-      sameSite: true
-      // secure: true
+      sameSite: true,
+      signed: true,
+      secure:
+        NodeStatus.env === 'development' || NodeStatus.env === 'test'
+          ? undefined
+          : true
     })
-    return res.status(200).send({ ok: true, message: 'Loggin exitoso' })
+    // Enviamos Refresh Cookie
+    res.cookie('refreshToken', refreshToken, {
+      maxAge: CookieAge.RefreshCookie,
+      httpOnly: true,
+      sameSite: true,
+      signed: true,
+      secure:
+        NodeStatus.env === 'development' || NodeStatus.env === 'test'
+          ? undefined
+          : true
+    })
+    return res.status(200).send({ ok: true, message: 'Ingreso exitoso' })
   } catch (err) {
     next(err)
   }
