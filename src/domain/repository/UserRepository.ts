@@ -1,10 +1,24 @@
+import Gym from '../entity/Gym'
 import User from '../entity/User'
 interface UserRepository {
+  // Crear nuevo y guardar en base de datos
   save: (user: User) => Promise<User>
-  findByEmail: (email: string) => Promise<User>
-  findById: (id: string) => Promise<User>
-  emailExists: (email: string) => Promise<null>
-  updateById: (id: string, update: object) => Promise<User | null>
+  // Encontrar uno por su email
+  getByEmail: (email: string) => Promise<User | null>
+  // Encontrar uno por su id
+  getById: (id: string) => Promise<User | null>
+  // Encontrar todos
+  getAll: () => Promise<Array<User>>
+  // Actualizar uno por su id
+  updateById: (
+    id: string,
+    update: User | Gym | object
+  ) => Promise<User | Gym | null>
+  // Eliminar uno por su id
+  deleteById: (id: string) => Promise<void>
+  // Filtrar uno por parametros
+  filterOne: (filter: object) => Promise<User | Gym | null>
+  // Filtrar varios por parametros
 }
 
 export default UserRepository

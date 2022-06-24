@@ -10,10 +10,7 @@ class UserValidator {
         const errors = result.error.issues.map((el) => el.message)
         throw errors
       }
-      const { email, password } = req.body
-      req.body.email = email.toLowerCase().trim()
-      req.body.password = password.trim()
-      next()
+      return next()
     } catch (err) {
       return res.status(403).send({ ok: false, message: err })
     }
@@ -47,7 +44,7 @@ class UserValidator {
       }
       req.body.oldPassword = oldPassword.trim()
       req.body.newPassword = newPassword.trim()
-      next()
+      return next()
     } catch (err) {
       return res.status(400).send({ ok: false, message: err })
     }
@@ -63,7 +60,7 @@ class UserValidator {
         throw error
       }
       req.body.newEmail = newEmail.toLowerCase().trim()
-      next()
+      return next()
     } catch (err) {
       return res.status(400).send({ ok: false, message: err })
     }
@@ -83,7 +80,7 @@ class UserValidator {
         throw error
       }
       req.body.email = email.toLowerCase().trim()
-      next()
+      return next()
     } catch (err) {
       return res.status(400).send({ ok: false, message: err })
     }

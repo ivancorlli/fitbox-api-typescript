@@ -10,6 +10,14 @@ class MongoGymRepository extends MongoUserRepository implements GymRepository {
     const gymSaved = await newGym.save()
     return gymSaved
   }
+
+  async updateById(userId: string, update: object): Promise<User | null> {
+    const userUpdated: User | null = await this._Gym.findByIdAndUpdate(
+      userId,
+      update
+    )
+    return userUpdated
+  }
 }
 
 export default MongoGymRepository

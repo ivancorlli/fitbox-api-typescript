@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
 import CreateNew from '../../../application/use-case/session/CreateNew'
-import UserLogin from '../../../application/use-case/user/UserLogin'
 import Session from '../../../domain/entity/Session'
 import MongoSessionRepository from '../../mongo/repository/MongoSessionRepository'
 import MongoUserRepository from '../../mongo/repository/MongoUserRepository'
@@ -10,20 +9,21 @@ import TokenRepository from '../../utils/token'
 import { NodeStatus } from '../../../config/config'
 import { CookieAge } from '../../../domain/object-value/CookieAge'
 import { TokenAge } from '../../../domain/object-value/TokenAge'
+import Login from '../../../application/use-case/user/Login'
 
 async function userLogin(req: Request, res: Response, next: NextFunction) {
   // Instanciamos Repositorio de usuario
   const UserDb = new MongoUserRepository()
   // Instanciamos Repositorio de Session
   const SessionDb = new MongoSessionRepository()
-  // INstanciamos Repositorio de Hasheo
-  const hashPassword = new BcryptRepository()
+  // Instanciamos el respositorio de HASHEO
+  const HashRepository = new BcryptRepository()
+  // Instanciamos el respositorio de Token
+  const Token = new TokenRepository()
   // Instanciamos caso de uso LOGIN
-  const login = new UserLogin(UserDb, hashPassword)
+  const login = new Login(UserDb, HashRepository)
   // Instanciamos caos de uso CREAR SESION
   const session = new CreateNew(SessionDb)
-  // Instanciamos repositorio para manejar tokens
-  const Token = new TokenRepository()
   // Instanciamos repositorio para crear ID
   const ID = uuidv4()
   // ------------------------------------ //
@@ -35,7 +35,7 @@ async function userLogin(req: Request, res: Response, next: NextFunction) {
     // Definimos los parametros para la nueva session
     const Session: Session = {
       _id: ID,
-      uid: user!._id
+      uid: user!._id!
     }
     // Creamos una nueva session
     const newSession = await session.start(Session)
@@ -76,9 +76,10 @@ async function userLogin(req: Request, res: Response, next: NextFunction) {
           ? undefined
           : true
     })
-    return res.status(200).send({ ok: true, message: 'Ingreso exitoso' })
+    res.status(200).send({ ok: true, message: 'Ingreso exitoso' })
+    return
   } catch (err) {
-    next(err)
+    return next(err)
   }
 }
 export default userLogin

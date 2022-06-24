@@ -1,5 +1,5 @@
+import CustomError from '../../../domain/exception/CustomError'
 import UserRepository from '../../../domain/repository/UserRepository'
-import CustomError from '../../../domain/service/ErrorService'
 
 class ChangeEmail {
   private readonly _UserRepository: UserRepository
@@ -8,20 +8,31 @@ class ChangeEmail {
   }
 
   async start(id: string, newEmail: string) {
-    try {
-      // Verificamos que existe el usuario enviado
-      const userFound = await this._UserRepository.findById(id)
-      // Si el correo enviado es igual al anterior enviamos un error
-      const error = new CustomError('El nuevo correo es igual al actual')
-      if (userFound?.email === newEmail) throw error.badRequest()
-      // Actualizamos el email del usuario
-      const userUpdated = await this._UserRepository.updateById(id, {
-        email: newEmail
-      })
-      return userUpdated
-    } catch (err) {
-      if (err) throw err
+    // Requerir id del usuario
+    if (!id) {
+      throw CustomError('Error al actualizar email').internalError()
     }
+    // Requerir nuevo email
+    if (!newEmail) {
+      throw CustomError('Es necesario enviar un email').badRequest()
+    }
+    // Verificamos que existe el usuario enviado
+    const userFound = await this._UserRepository.getById(id)
+    // Si no encontramos usuario arrojamos error
+    if (!userFound) {
+      throw CustomError('Usuario inexistente').badRequest()
+    }
+    // Sanitizamos email
+    newEmail = newEmail.toLowerCase().trim()
+    // Si el correo enviado es igual al anterior enviamos un error
+    if (userFound.email === newEmail) {
+      throw CustomError('El email enviado es igual al actual').badRequest()
+    }
+    // Actualizamos el email del usuario
+    const userUpdated = await this._UserRepository.updateById(id, {
+      email: newEmail
+    })
+    return userUpdated
   }
 }
 export default ChangeEmail

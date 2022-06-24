@@ -1,28 +1,27 @@
-import { NextFunction, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { NodeStatus } from '../../config/config'
+import UserAuth from '../../domain/entity/UserAuth'
 import { CookieAge } from '../../domain/object-value/CookieAge'
 import { TokenAge } from '../../domain/object-value/TokenAge'
 import MongoSessionRepository from '../mongo/repository/MongoSessionRepository'
-import { AuthRequest, UserAuth } from '../routes/interface/Auth'
 import TokenRepository from '../utils/token'
 
 async function deserializeUser(
-  req: AuthRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ) {
-  // Importamos Repositorio de Tokens
-  const Token = new TokenRepository()
   // Importamos Repositorio de Session
   const Session = new MongoSessionRepository()
+  // Instanciamos el respositorio de Token
+  const Token = new TokenRepository()
 
   // Obtenemos tokens
   const { accessToken } = req.signedCookies
   const { refreshToken } = req.signedCookies
 
   // Si no hay un access token o refresh, no enviamos los datos del usuario
-  if (!accessToken || !refreshToken) next()
-
+  if (!accessToken || !refreshToken) return next()
   // Verificamos el token de accesso
   // @ts-ignore
   const { payload, expired } = await Token.verifyAccessToken(accessToken)
@@ -62,8 +61,8 @@ async function deserializeUser(
 
     const newAccessToken = await Token.createAccessToken(
       {
-        sid: refreshSession!._id,
-        uid: refreshSession!.uid
+        sid: refreshSession._id,
+        uid: refreshSession.uid
       },
       TokenAge.AccessToken
     )
@@ -81,11 +80,11 @@ async function deserializeUser(
 
     // Definimos parametros del usuario
     const user: UserAuth = {
-      sid: refreshSession!._id,
-      uid: refreshSession!.uid
+      sid: refreshSession._id,
+      uid: refreshSession.uid
     }
     req.user = user
-    next()
+    return next()
   }
 }
 

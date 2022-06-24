@@ -7,10 +7,10 @@ async function userGetData(req: Request, res: Response, next: NextFunction) {
   const User = new MongoUserRepository()
   try {
     const { uid } = req.user
-    const userFound = await User.findById(uid)
+    const userFound = await User.getById(uid)
     return res
       .status(200)
-      .send({ ok: true, response: UserDto.singleUser(userFound) })
+      .send({ ok: true, response: UserDto.singleUser(userFound!) })
   } catch (err) {
     next(err)
   }

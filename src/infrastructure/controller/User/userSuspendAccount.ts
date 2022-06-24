@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import UpdateStatus from '../../../application/use-case/user/UpdateStatus'
+
 import { UserStatus } from '../../../domain/object-value/UserStatus'
 import MongoUserRepository from '../../mongo/repository/MongoUserRepository'
 

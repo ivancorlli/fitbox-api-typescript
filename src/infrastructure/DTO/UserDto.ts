@@ -4,7 +4,7 @@ class UserDto {
   static singleUser(user: User) {
     return {
       id: user._id,
-      email: user._id,
+      email: user.email,
       status: user.status,
       verified: user.verified,
       role: user.role

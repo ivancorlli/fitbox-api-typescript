@@ -7,18 +7,17 @@ import TokenRepository from '../../utils/token'
 async function forgotPassword(req: Request, res: Response, next: NextFunction) {
   // Instanciamos Repositorio del Usuario
   const UserDb = new MongoUserRepository()
-  // Instanciamos Repositorio de encriptado
+  // Instanciamos el respositorio de ENCRIPTADO
   const Crypt = new CryptRepository()
-  // Instanciamos Repositorio de token
+  // Instanciamos el respositorio de Token
   const Token = new TokenRepository()
   try {
     // Obetenemos email del usuario
     const { email } = req.body
     // Bucamos si existe el email enviado
-    const userFound = await UserDb.findByEmail(email)
+    const userFound = await UserDb.getByEmail(email)
     // Encriptamos los datos
-    const encripted = await Crypt.encrypt({ uid: userFound._id })
-    console.log(typeof encripted)
+    const encripted = await Crypt.encrypt({ uid: userFound!._id })
     // Creamos un nuevo token para verificar la informacionenviada
     const newToken = await Token.newToken(encripted, TokenAge['1Hora'])
     // TODO LLAMAR SUSCRIBER
@@ -29,8 +28,7 @@ async function forgotPassword(req: Request, res: Response, next: NextFunction) {
       newToken
     })
   } catch (err) {
-    console.log(err)
-    next(err)
+    return next(err)
   }
 }
 export default forgotPassword

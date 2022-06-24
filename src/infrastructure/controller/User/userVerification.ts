@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import VerifyUser from '../../../application/use-case/user/VerifyUser'
-import CustomError from '../../../domain/service/ErrorService'
+import CustomError from '../../../domain/exception/CustomError'
 import MongoClientRepository from '../../mongo/repository/MongoClientRepository'
 import CryptRepository from '../../utils/encrypt'
 import TokenRepository from '../../utils/token'
@@ -9,12 +9,12 @@ async function userVerification(
   res: Response,
   next: NextFunction
 ) {
-  // Isntanciamos Repositorio del Token
-  const Token = new TokenRepository()
-  // Instanciamos Repositorio de encriptacion
-  const Crypt = new CryptRepository()
   // Instanciamos Repositorio del Usuario
   const UserDb = new MongoClientRepository()
+  // Instanciamos el respositorio de ENCRIPTADO
+  const Crypt = new CryptRepository()
+  // Instanciamos el respositorio de Token
+  const Token = new TokenRepository()
   // Instanciamos caso de uso
   const verify = new VerifyUser(UserDb)
   // --------------------------------- //
@@ -28,8 +28,9 @@ async function userVerification(
     // Desencriptamos informacion
     const decrypted = await Crypt.decrypt(tokenVerified!.payload)
     // Verificamos el codigo encriptado con el cargado por el usuario
-    const error = new CustomError('El codigo enviado no es valido')
-    if (parseInt(code) !== decrypted.code) throw error.badRequest()
+    if (parseInt(code) !== decrypted.code) {
+      throw CustomError('El codigo enviado es invalido').badRequest()
+    }
     // Verificamos al usuario
     await verify.start(decrypted.uid, true)
     return res.status(200).send({ ok: true, message: 'Usuario Verificado' })

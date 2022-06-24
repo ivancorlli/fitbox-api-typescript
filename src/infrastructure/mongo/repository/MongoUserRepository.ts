@@ -1,42 +1,39 @@
 import User from '../../../domain/entity/User'
-import CustomError from '../../../domain/service/ErrorService'
+import UserRepository from '../../../domain/repository/UserRepository'
 import UserModel from '../User.model'
 
-class MongoUserRepository {
+class MongoUserRepository implements UserRepository {
   private readonly _User = UserModel
   async save(user: User): Promise<User> {
     return user
   }
 
   // *Metodo para buscar al usuario por us email
-  async findByEmail(email: string): Promise<User | never> {
+  async getByEmail(email: string): Promise<User | null> {
     // Buscamos al usuario por su email en DDBB
     const userFound: User | null = await this._User.findOne({ email })
-    // Si el correo no existe arrojamos un error
-    const error = new CustomError('No existe un usuario con este email')
-    if (!userFound) throw error.badRequest()
-    // Si el correo esta registrado en base de datos, devovlemos el usuario encontrado
+    return userFound
+  }
+
+  // *Metodo para buscar todos los ususarios
+  async getAll(): Promise<Array<User>> {
+    // Buscamos todos los usuarios
+    const userFound = await this._User.find()
     return userFound
   }
 
   // * Metodo para encontrar al usario por su id
-  async findById(userId: string): Promise<User | never> {
+  async getById(userId: string): Promise<User | null> {
     // Buscamos el id del usuario
     const userFound: User | null = await this._User.findById(userId)
-    // Si no existe un usario arrojamos un error
-    const error = new CustomError('Usuario Inexistente')
-    if (!userFound) throw error.badRequest()
     return userFound
   }
 
-  //* Metodo utilizado para comprobar la existencia de un email
-  async emailExists(email: string): Promise<null | never> {
-    // Buscamos al usuario por su email en DDBB
-    const userFound: User | null = await this._User.findOne({ email })
-    // Si el correo existe arrojamos un error
-    const error = new CustomError('Este email ya ha sido registrado')
-    if (userFound) throw error.badRequest()
-    // Si no esta registrado devolvemos null
+  // * Metedo para filtrar usuario por parametros
+  async filterOne(filter: object): Promise<User | null> {
+    // buscamos el usuario por parametros
+    console.log(filter)
+    const userFound: User | null = await this._User.findOne(filter)
     return userFound
   }
 
@@ -46,6 +43,10 @@ class MongoUserRepository {
       update
     )
     return userUpdated
+  }
+
+  async deleteById(userId: string): Promise<void> {
+    await this._User.findByIdAndUpdate(userId)
   }
 }
 

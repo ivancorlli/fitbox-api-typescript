@@ -8,14 +8,10 @@ class UpdateStatus {
   }
 
   async start(id: string, status: UserStatus) {
-    try {
-      const userUpdated = await this._UserRepository.updateById(id, {
-        status
-      })
-      return userUpdated
-    } catch (err) {
-      if (err) throw err
-    }
+    const userUpdated = await this._UserRepository.updateById(id, {
+      status
+    })
+    return userUpdated
   }
 }
 export default UpdateStatus

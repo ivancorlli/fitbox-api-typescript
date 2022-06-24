@@ -1,3 +1,4 @@
+import CustomError from '../../../domain/exception/CustomError'
 import UserRepository from '../../../domain/repository/UserRepository'
 
 class VerifyUser {
@@ -7,17 +8,15 @@ class VerifyUser {
   }
 
   async start(id: string, verified: boolean) {
-    try {
-      // Verificamos que exista un usuario con ese id
-      const userMatch = await this._UserRepository.findById(id)
-      // Actualizamos al usuario
-      const userUpdated = await this._UserRepository.updateById(userMatch._id, {
-        verified
-      })
-      return userUpdated
-    } catch (err) {
-      if (err) throw err
+    // Requerimos id
+    if (!id) {
+      throw CustomError('Error al verificar').internalError()
     }
+    // Actualizamos al usuario
+    const userUpdated = await this._UserRepository.updateById(id, {
+      verified
+    })
+    return userUpdated
   }
 }
 export default VerifyUser

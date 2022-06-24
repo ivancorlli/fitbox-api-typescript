@@ -1,5 +1,6 @@
 import 'dotenv/config'
 
+// * Configuraciones del servidor
 export const NodeStatus = {
   env: process.env.NODE_ENV
 }
@@ -9,11 +10,14 @@ export const ServerConfig = {
   dataBase: process.env.DB
 }
 
+// ----------------------------- //
+// * Configuraciones de base de datos
 export const UserRoles = {
   gym: process.env.GYM_ROLE,
   client: process.env.CLIENT_ROLE
 }
-
+// ----------------------------- //
+// * Configuracion de secrets para diferentes modulos
 export const AccessTokenSecret = {
   privateKey: process.env.ACCESS_PRIVATE_KEY,
   publicKey: process.env.ACCESS_PUBLIC_KEY
@@ -29,4 +33,12 @@ export const EncryptSecret = {
 
 export const CookieConfig = {
   sign: process.env.COOKIE_SIGNED
+}
+// ----------------------------- //
+// * Configuracion de modulo emailer
+export const EmailConfig = {
+  host: process.env.EMAIL_HOST,
+  port: process.env.EMAIL_PORT,
+  user: process.env.EMAIL_USER,
+  pass: process.env.EMAIL_PASS
 }

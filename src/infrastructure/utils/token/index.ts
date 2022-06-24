@@ -1,6 +1,6 @@
 import JWT from 'jsonwebtoken'
 import { AccessTokenSecret, NewTokenSecret } from '../../../config/config'
-import CustomError from '../../../domain/service/ErrorService'
+import CustomError from '../../../domain/exception/CustomError'
 interface TokenResponse {
   [key: string]: any
 }
@@ -24,6 +24,7 @@ interface TokenRepo {
 
 class TokenRepository implements TokenRepo {
   private readonly _Token = JWT
+
   async createAccessToken(
     content: SessionToken,
     expiresIn: number
@@ -86,9 +87,9 @@ class TokenRepository implements TokenRepo {
         expired: false
       }
     } catch (err) {
-      // Instanciamos Error
-      const error = new CustomError('No estas autorizado')
-      if (err) throw error.badRequest()
+      if (err) {
+        throw CustomError('No estas autorizado').unauthorized()
+      }
     }
   }
 }

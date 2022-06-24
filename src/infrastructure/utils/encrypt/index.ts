@@ -1,6 +1,6 @@
 import crypto from 'crypto-js'
 import { EncryptSecret } from '../../../config/config'
-import CustomError from '../../../domain/service/ErrorService'
+import CustomError from '../../../domain/exception/CustomError'
 
 interface EncryptResponse {
   [key: string]: any
@@ -22,8 +22,7 @@ class CryptRepository {
       EncryptSecret.secret!
     ).toString(this._Crypto.enc.Utf8)
     if (!newDecrypted || newDecrypted.length < 1 || newDecrypted === null) {
-      const error = new CustomError('No estas autorizado')
-      throw error.badRequest()
+      throw CustomError('No estas autorizado').unauthorized()
     }
     const string = JSON.parse(newDecrypted).content
 

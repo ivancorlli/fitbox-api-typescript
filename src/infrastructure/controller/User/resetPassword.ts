@@ -8,14 +8,14 @@ import RecoverPassword from '../../../application/use-case/user/RecoverPassword'
 async function resetPassword(req: Request, res: Response, next: NextFunction) {
   // Instanciamos Repositorio del uusario
   const UserDb = new MongoUserRepository()
-  // Instanciamos Repositorio de hasheo
-  const HashPass = new BcryptRepository()
-  // Instanciamos Repositorio de encriptado
+  // Instanciamos el respositorio de HASHEO
+  const HashRepository = new BcryptRepository()
+  // Instanciamos el respositorio de ENCRIPTADO
   const Crypt = new CryptRepository()
-  // Instanciamos Repositorio de token
+  // Instanciamos el respositorio de Token
   const Token = new TokenRepository()
   // Instanciamos caso de uso CAMBIAR CONTRASENIA
-  const changePassowrd = new RecoverPassword(UserDb, HashPass)
+  const changePassowrd = new RecoverPassword(UserDb, HashRepository)
   try {
     // Obtenemos nueva contrasenia
     const { newPassword } = req.body
