@@ -32,15 +32,26 @@ class MongoUserRepository implements UserRepository {
   // * Metedo para filtrar usuario por parametros
   async filterOne(filter: object): Promise<User | null> {
     // buscamos el usuario por parametros
-    console.log(filter)
     const userFound: User | null = await this._User.findOne(filter)
     return userFound
   }
 
-  async updateById(userId: string, update: object): Promise<User | null> {
+  // * Metedo para filtrar usuarios por parametros
+  async filterMany(filter: object): Promise<Array<User> | null> {
+    // buscamos el usuario por parametros
+    const usersFound = await this._User.find(filter)
+    return usersFound
+  }
+
+  async updateById(
+    userId: string,
+    update: object,
+    opts?: object
+  ): Promise<User | null> {
     const userUpdated: User | null = await this._User.findByIdAndUpdate(
       userId,
-      update
+      update,
+      opts
     )
     return userUpdated
   }

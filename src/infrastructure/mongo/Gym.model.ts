@@ -4,15 +4,17 @@ import Gym from '../../domain/entity/Gym'
 import { UserRoles } from '../../config/config'
 
 const gymModel = new Schema<Gym>({
-  name: { type: String, default: '' },
-  trainings: [{ type: String }],
-  description: { type: String, default: '' },
-  profileImage: { type: String, default: '' },
+  profile: {
+    name: { type: String, default: null },
+    trainings: [{ type: String }],
+    description: { type: String, default: null },
+    profileImage: { type: String, default: null }
+  },
   direction: {
-    country: { type: String, default: '' },
-    city: { type: String, default: '' },
-    state: { type: String, default: '' },
-    street: { type: String, default: '' },
+    country: { type: String, default: null },
+    city: { type: String, default: null },
+    state: { type: String, default: null },
+    street: { type: String, default: null },
     streetNumber: { type: Number, default: 0 },
     postalCode: { type: Number, default: 0 }
   },

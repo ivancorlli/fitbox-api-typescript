@@ -25,10 +25,7 @@ export interface GymConfiguration {
 }
 
 interface Gym extends User {
-  name: string
-  trainings: Array<string>
-  description: string
-  profileImage: string
+  profile: GymProfile
   direction: GymDirection
   phone: GymPhone
   configuration: GymConfiguration

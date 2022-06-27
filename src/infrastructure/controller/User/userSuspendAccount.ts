@@ -18,6 +18,7 @@ async function userSuspendAccount(
   try {
     // Suspendemos cuenta del usuario
     await changeStatus.start(uid, UserStatus.Suspended)
+    // TODO NOTIFICAR A LOS CLIENTES INSCRIPTOS EN EL GIMNASIO
     return res
       .status(200)
       .send({ ok: true, message: 'Su cuenta ha sido suspendida temporalmente' })

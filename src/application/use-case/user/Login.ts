@@ -27,7 +27,6 @@ class Login {
     // Buscamos el usuario por su email
     const userFound = await this._UserRepository.getByEmail(email)
     // Si no esta verificado no le permitimos ingresar
-
     if (!userFound) {
       throw CustomError('Usuario inexistente').badRequest()
     }

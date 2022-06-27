@@ -29,7 +29,7 @@ async function deserializeUser(
   // Si hay payload, verificamos la session
   if (payload) {
     // Verificamos que la session sea valida
-    const session = await Session.findById(payload.sid)
+    const session = await Session.getById(payload.sid)
     // Si no hay session, no enviamos usuario
     if (!session) return next()
     // Si el user de la session no coincide con el enviado en el token, no enviamos usuario
@@ -54,7 +54,7 @@ async function deserializeUser(
     if (!refresh) return next()
 
     // Verificamos la session del refresh
-    const refreshSession = await Session.findById(refresh.sid)
+    const refreshSession = await Session.getById(refresh.sid)
 
     // Si no existe la session, no enviamos usuario
     if (!refreshSession) return next()

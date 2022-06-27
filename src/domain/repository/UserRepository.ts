@@ -4,9 +4,9 @@ interface UserRepository {
   // Crear nuevo y guardar en base de datos
   save: (user: User) => Promise<User>
   // Encontrar uno por su email
-  getByEmail: (email: string) => Promise<User | null>
+  getByEmail: (email: string) => Promise<User | Gym | null>
   // Encontrar uno por su id
-  getById: (id: string) => Promise<User | null>
+  getById: (id: string) => Promise<User | Gym | null>
   // Encontrar todos
   getAll: () => Promise<Array<User>>
   // Actualizar uno por su id
@@ -19,6 +19,7 @@ interface UserRepository {
   // Filtrar uno por parametros
   filterOne: (filter: object) => Promise<User | Gym | null>
   // Filtrar varios por parametros
+  filterMany: (filter: object) => Promise<Array<User | Gym> | null>
 }
 
 export default UserRepository

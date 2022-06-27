@@ -4,7 +4,6 @@ import newUser from '../controller/User/newUser'
 import resetPassword from '../controller/User/resetPassword'
 import userChangeEmail from '../controller/User/userChangeEmail'
 import userChangePassword from '../controller/User/userChangePassword'
-import userGetData from '../controller/User/userGetData'
 import userLogin from '../controller/User/userLogin'
 import userLogout from '../controller/User/userLogout'
 import userSuspendAccount from '../controller/User/userSuspendAccount'
@@ -34,7 +33,6 @@ UserRouter.patch('/reset/:token', resetPassword)
 // ? Private Router
 // * Require user Authentication
 UserRouter.use(requireUser)
-UserRouter.get('/', userGetData)
 UserRouter.post('/logout', userLogout)
 UserRouter.patch('/suspend', userSuspendAccount)
 UserRouter.patch(

@@ -1,7 +1,8 @@
+import Gym from '../../domain/entity/Gym'
 import User from '../../domain/entity/User'
 
 class UserDto {
-  static singleUser(user: User) {
+  static singleUser(user: User | Gym) {
     return {
       id: user._id,
       email: user.email,

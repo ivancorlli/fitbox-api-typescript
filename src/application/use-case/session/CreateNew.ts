@@ -10,7 +10,7 @@ class CreateNew {
   async start(session: Session) {
     try {
       // creamos una nueva session
-      const newSession = await this._SessionRepository.createNew(session)
+      const newSession = await this._SessionRepository.create(session)
 
       return newSession
     } catch (err) {

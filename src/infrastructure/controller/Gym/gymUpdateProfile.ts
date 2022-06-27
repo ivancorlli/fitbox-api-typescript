@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
+import { GymProfile } from '../../../domain/entity/Gym'
 
 import MongoGymRepository from '../../mongo/repository/MongoGymRepository'
 
@@ -25,12 +26,19 @@ async function gymUpdateProfile(
     if (description) {
       description = description.trim()
     }
-    // Actualizamos al usuario
-    const gymUpdated = await _Gym.updateById(uid, {
+    // Datos a actualizar
+    const profile: GymProfile = {
       name,
+      trainings,
       description,
       profileImage
-    })
+    }
+    // Actualizamos al usuario
+    const gymUpdated = await _Gym.updateById(
+      uid,
+      { profile },
+      { ignoreUndefined: true }
+    )
     return res
       .status(200)
       .send({ ok: true, message: 'Cambios guardados', gymUpdated })
