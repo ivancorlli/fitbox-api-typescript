@@ -8,17 +8,21 @@ class EmailExists {
   }
 
   async start(email: string) {
-    // Arrojar error si no viene el email
-    if (!email) throw CustomError('Es necesario enviar un email').badRequest()
-    // Sanitizamos email
-    email = email.toLowerCase().trim()
-    // Buscamos el email
-    const emailFound = await this.UserRepository.getByEmail(email)
-    // Si encuentra email arrojamos error
-    if (emailFound) {
-      throw CustomError(`El email ${email} ya ha sido registrado`).badRequest()
+    try {
+      // Arrojar error si no viene el email
+      if (!email) throw CustomError.badRequest('Es necesario enviar un email')
+      // Sanitizamos email
+      email = email.toLowerCase().trim()
+      // Buscamos el email
+      const emailFound = await this.UserRepository.getByEmail(email)
+      // Si encuentra email arrojamos error
+      if (emailFound) {
+        throw CustomError.badRequest(`El email ${email} ya ha sido registrado`)
+      }
+      return emailFound
+    } catch (err) {
+      if (err) throw err
     }
-    return emailFound
   }
 }
 export default EmailExists

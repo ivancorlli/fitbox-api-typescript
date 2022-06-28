@@ -27,7 +27,7 @@ async function userLogout(req: Request, res: Response, next: NextFunction) {
     })
     return res.status(200).send({ ok: true, message: 'Sesion cerrada' })
   } catch (err) {
-    next(err)
+    return next(err)
   }
 }
 export default userLogout

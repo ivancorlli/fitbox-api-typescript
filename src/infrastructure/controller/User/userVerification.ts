@@ -29,13 +29,13 @@ async function userVerification(
     const decrypted = await Crypt.decrypt(tokenVerified!.payload)
     // Verificamos el codigo encriptado con el cargado por el usuario
     if (parseInt(code) !== decrypted.code) {
-      throw CustomError('El codigo enviado es invalido').badRequest()
+      throw CustomError.badRequest('El codigo enviado es invalido')
     }
     // Verificamos al usuario
     await verify.start(decrypted.uid, true)
     return res.status(200).send({ ok: true, message: 'Usuario Verificado' })
   } catch (err) {
-    next(err)
+    return next(err)
   }
 }
 export default userVerification

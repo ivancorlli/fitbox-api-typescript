@@ -11,9 +11,9 @@ class GetPlansByGymId {
   async start(gymId: string): Promise<Array<Plan> | null> {
     // Arrojar error si no enviamos el gym ID
     if (!gymId) {
-      throw CustomError(
+      throw CustomError.badRequest(
         'Se produjo un error al encontrar los planes'
-      ).badRequest()
+      )
     }
     const plansFound = await this.PlanRepository.filterMany({ gym: gymId })
     return plansFound

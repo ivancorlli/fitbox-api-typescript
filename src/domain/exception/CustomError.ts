@@ -1,55 +1,44 @@
 import Error from '../entity/Error'
-import ErrorRepository from '../repository/ErrorRepository'
 
-class CustomError implements ErrorRepository {
-  /* eslint-disable */
-  private static _instance: CustomError
-  /* eslint-enable */
-  private code: number
-  private message: string
-  private constructor(message: string) {
-    this.message = message
-    this.code = 0
-  }
+class CustomError {
+  private static code: number
+  private static message: string
 
-  static setInstance(message: string) {
-    if (!CustomError._instance) {
-      CustomError._instance = new CustomError(message)
-    }
-    return CustomError._instance
-  }
-
-  badRequest(): Error {
-    this.code = 400
+  static badRequest(message: string): Error {
+    CustomError.code = 400
+    CustomError.message = message
     return {
-      code: this.code,
-      message: this.message
+      code: CustomError.code,
+      message: CustomError.message
     }
   }
 
-  unauthorized(): Error {
-    this.code = 401
+  static unauthorized(message: string = 'No estas autorizado'): Error {
+    CustomError.code = 401
+    CustomError.message = message
     return {
-      code: this.code,
-      message: this.message
+      code: CustomError.code,
+      message: CustomError.message
     }
   }
 
-  forbidden(): Error {
-    this.code = 403
+  static forbidden(message: string = 'No puedes realizar esta accion'): Error {
+    CustomError.code = 403
+    CustomError.message = message
     return {
-      code: this.code,
-      message: this.message
+      code: CustomError.code,
+      message: CustomError.message
     }
   }
 
-  internalError(): Error {
-    this.code = 500
+  static internalError(message: string = 'Se produjo un error'): Error {
+    CustomError.code = 500
+    CustomError.message = message
     return {
-      code: this.code,
-      message: this.message
+      code: CustomError.code,
+      message: CustomError.message
     }
   }
 }
 
-export default CustomError.setInstance
+export default CustomError

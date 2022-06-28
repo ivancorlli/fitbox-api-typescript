@@ -18,7 +18,7 @@ async function userChangeEmail(
     await changeEmail.start(id, newEmail)
     return res.status(200).send({ ok: true, message: 'Email Actualizado' })
   } catch (err) {
-    next(err)
+    return next(err)
   }
 }
 export default userChangeEmail

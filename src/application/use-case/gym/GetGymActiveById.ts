@@ -12,15 +12,15 @@ class GetGymActiveById {
   async start(gymId: string): Promise<Gym> {
     // Arrojamos error si no recibimos id
     if (!gymId) {
-      throw CustomError('Es necesario enviar id').internalError()
+      throw CustomError.internalError('Es necesario enviar id')
     }
     const planFound = await this.GymRepository.getById(gymId)
     // Arrojamos error si no existe un plan con el id
     if (!planFound) {
-      throw CustomError('No existe el gimnasio solicitado').badRequest()
+      throw CustomError.badRequest('No existe el gimnasio solicitado')
     }
     if (planFound.status === UserStatus.Suspended) {
-      throw CustomError('Gimnasio suspendido').badRequest()
+      throw CustomError.badRequest('Gimnasio suspendido')
     }
     return planFound
   }

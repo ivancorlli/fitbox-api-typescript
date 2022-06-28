@@ -22,7 +22,7 @@ class CryptRepository {
       EncryptSecret.secret!
     ).toString(this._Crypto.enc.Utf8)
     if (!newDecrypted || newDecrypted.length < 1 || newDecrypted === null) {
-      throw CustomError('No estas autorizado').unauthorized()
+      throw CustomError.unauthorized('No estas autorizado')
     }
     const string = JSON.parse(newDecrypted).content
 

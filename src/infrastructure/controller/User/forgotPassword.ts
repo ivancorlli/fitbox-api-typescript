@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
+import CustomError from '../../../domain/exception/CustomError'
 import { TokenAge } from '../../../domain/object-value/TokenAge'
 import MongoUserRepository from '../../mongo/repository/MongoUserRepository'
 import CryptRepository from '../../utils/encrypt'
@@ -16,6 +17,12 @@ async function forgotPassword(req: Request, res: Response, next: NextFunction) {
     const { email } = req.body
     // Bucamos si existe el email enviado
     const userFound = await UserDb.getByEmail(email)
+    // Arrojamos error si no existe un usuario con ese email
+    if (!userFound) {
+      throw CustomError.badRequest(
+        'No existe un usuario registrado con ese email'
+      )
+    }
     // Encriptamos los datos
     const encripted = await Crypt.encrypt({ uid: userFound!._id })
     // Creamos un nuevo token para verificar la informacionenviada

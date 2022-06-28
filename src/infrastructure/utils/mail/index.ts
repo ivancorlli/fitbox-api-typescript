@@ -1,11 +1,12 @@
 import nodemailer from 'nodemailer'
 import { EmailConfig } from '../../../config/config'
 import Email from '../../../domain/entity/Email'
+import CustomError from '../../../domain/exception/CustomError'
 import EmailRepository from '../../../domain/repository/EmailRepository'
 
 const transporter = nodemailer.createTransport({
   // @ts-ignore
-  host: EmailConfig.host,
+  host: EmailConfig.host?.toString(),
   port: EmailConfig.port,
   secure: true, // true for 465, false for other ports
   auth: {
@@ -16,7 +17,7 @@ const transporter = nodemailer.createTransport({
 
 class Emailer implements EmailRepository {
   private readonly _Transporter = transporter
-  async sendNew(email: Email) {
+  async send(email: Email) {
     try {
       const newEmail = await this._Transporter.sendMail({
         from: email.from,
@@ -26,7 +27,9 @@ class Emailer implements EmailRepository {
       })
       return newEmail.accepted.toString()
     } catch (err) {
-      console.log(err)
+      if (err) {
+        throw CustomError.internalError()
+      }
     }
   }
 }

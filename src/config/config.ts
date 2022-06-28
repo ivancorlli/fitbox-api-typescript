@@ -4,12 +4,10 @@ import 'dotenv/config'
 export const NodeStatus = {
   env: process.env.NODE_ENV
 }
-
 export const ServerConfig = {
   port: parseInt(process.env.PORT!),
   dataBase: process.env.DB
 }
-
 // ----------------------------- //
 // * Configuraciones de base de datos
 export const UserRoles = {

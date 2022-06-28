@@ -15,20 +15,20 @@ const Validation = new UserValidation()
 
 // ? Public Router
 // * Dont require user Athentication
+UserRouter.post('/login', Validation.userRegistration, userLogin)
+UserRouter.post(
+  '/forgot-password',
+  Validation.forgotPasswordValidation,
+  forgotPassword
+)
+UserRouter.patch('/verify/:token', userVerification)
+UserRouter.patch('/reset/:token', resetPassword)
 UserRouter.post(
   '/',
   Validation.userQueryValidation,
   Validation.userRegistration,
   newUser
 )
-UserRouter.post(
-  '/forgot-password',
-  Validation.forgotPasswordValidation,
-  forgotPassword
-)
-UserRouter.post('/login', Validation.userRegistration, userLogin)
-UserRouter.patch('/verify/:token', userVerification)
-UserRouter.patch('/reset/:token', resetPassword)
 
 // ? Private Router
 // * Require user Authentication

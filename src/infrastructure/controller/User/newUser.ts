@@ -11,6 +11,9 @@ import { TokenAge } from '../../../domain/object-value/TokenAge'
 import EmailExists from '../../../application/use-case/user/EmailExists'
 import TokenRepository from '../../utils/token'
 import { Request, Response } from 'express'
+import Emailer from '../../utils/mail'
+import WelcomeEmail from '../../../application/use-case/email/WelcomeEmail'
+import ConfirmEmail from '../../../application/use-case/email/ConfirmEmail'
 
 async function newUser(req: Request, res: Response, next: any) {
   // Instanciamos Repositorio de ID
@@ -23,6 +26,12 @@ async function newUser(req: Request, res: Response, next: any) {
   const Crypt = new CryptRepository()
   // Instanciamos el respositorio de Token
   const Token = new TokenRepository()
+  // Instanciamos Repositorio de EMAIL
+  const emailer = new Emailer()
+  // Instanciamos caso de uso de uso ENVIAR EMAIL DE BIENVENIDA
+  const welcome = new WelcomeEmail(emailer)
+  // Instanciamos caso de uso ENVIAR EMAIL DE CONFIRMACION
+  const confirm = new ConfirmEmail(emailer)
 
   let UserDb: UserRepository
   // Definimos el tipo de usuario a crear dependiendo del tipo de query enviada
@@ -66,10 +75,10 @@ async function newUser(req: Request, res: Response, next: any) {
     const newToken = await Token.newToken(encripted, TokenAge['24Horas'])
     // TODO LLAMAR SUSCRIBER
     // TODO -- ENVIAR EMAIL DE BIENVENIDA
+    await welcome.start(newUser!.email)
     // TODO -- ENVIAR EMAIL DE VERIFICACION
-    return res
-      .status(201)
-      .send({ ok: true, message: 'Usuario creado', newToken })
+    await confirm.start(newUser!.email, randomDigit, newToken)
+    return res.status(201).send({ ok: true, message: 'Usuario creado' })
   } catch (err) {
     return next(err)
   }

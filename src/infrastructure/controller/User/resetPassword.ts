@@ -29,7 +29,7 @@ async function resetPassword(req: Request, res: Response, next: NextFunction) {
     await changePassowrd.start(decripted!.uid, newPassword)
     return res.status(200).send({ ok: true, message: 'Contraseña actualizada' })
   } catch (err) {
-    next(err)
+    return next(err)
   }
 }
 export default resetPassword

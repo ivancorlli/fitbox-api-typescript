@@ -15,7 +15,7 @@ async function gymGetData(req: Request, res: Response, next: NextFunction) {
       .status(200)
       .send({ ok: true, response: GymDto.singlePrivateUser(userFound) })
   } catch (err) {
-    next(err)
+    return next(err)
   }
 }
 

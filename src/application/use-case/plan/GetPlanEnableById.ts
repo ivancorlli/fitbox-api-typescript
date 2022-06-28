@@ -12,7 +12,7 @@ class GetPlanEnableById {
   async start(planId: string): Promise<Plan> {
     // Arrojamos error si no recibimos id
     if (!planId) {
-      throw CustomError('Es necesario enviar id').internalError()
+      throw CustomError.internalError('Es necesario enviar id')
     }
     const planFound = await this.PlanRepository.filterOne({
       _id: planId,
@@ -20,7 +20,7 @@ class GetPlanEnableById {
     })
     // Arrojamos error si no existe un plan con el id
     if (!planFound) {
-      throw CustomError('No existe el plan solicitado').badRequest()
+      throw CustomError.badRequest('No existe el plan solicitado')
     }
     return planFound
   }

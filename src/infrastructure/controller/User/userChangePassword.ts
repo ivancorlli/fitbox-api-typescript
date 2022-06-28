@@ -21,7 +21,7 @@ async function userChangePassword(
     await changePassword.start(id, oldPassword, newPassword)
     return res.status(201).send({ ok: true, message: 'Contraseña actualizada' })
   } catch (err) {
-    next(err)
+    return next(err)
   }
 }
 export default userChangePassword

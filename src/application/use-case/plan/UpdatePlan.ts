@@ -16,27 +16,27 @@ class UpdatePlan {
   ): Promise<Plan | null> {
     // Arrojamos error si no recibimos id del plan
     if (!planId) {
-      throw CustomError('Error al actualizar plan').internalError()
+      throw CustomError.internalError('Error al actualizar plan')
     }
     // Arrojamos error si no recibimos id del gimnasio
     if (!gymId) {
-      throw CustomError('Error al actualizar plan').internalError()
+      throw CustomError.internalError('Error al actualizar plan')
     }
     // Buscamos el plan a actualizar
     const planFound = await this.PlanRepository.getById(planId)
     // Arrojamos error si no encontramos ninungo
     if (!planFound) {
-      throw CustomError('No existe el plan solicitado').badRequest()
+      throw CustomError.badRequest('No existe el plan solicitado')
     }
     // Arrojamos error si el plan a actualizar no coincide con el id del gimnasio que lo creo
     if (planFound.gym !== gymId) {
-      throw CustomError('No puedes realizar esta accion').forbidden()
+      throw CustomError.forbidden('No puedes realizar esta accion')
     }
     // Arrojamos error si el plan esta desabilitado
     if (planFound.status === PlanStatus.Disable) {
-      throw CustomError(
+      throw CustomError.badRequest(
         'El plan no esta disponible para ser modificado, primero debe ser habilitado'
-      ).badRequest()
+      )
     }
     // Sanitizamos los datos a actualizar
     if (update.name) {

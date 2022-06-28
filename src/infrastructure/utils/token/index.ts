@@ -88,7 +88,7 @@ class TokenRepository implements TokenRepo {
       }
     } catch (err) {
       if (err) {
-        throw CustomError('No estas autorizado').unauthorized()
+        throw CustomError.unauthorized('No estas autorizado')
       }
     }
   }

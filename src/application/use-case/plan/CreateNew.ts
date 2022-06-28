@@ -10,25 +10,25 @@ class CreateNew {
 
   async start(plan: Plan) {
     if (!plan._id) {
-      throw CustomError('Se produjo un error al crear plan').internalError()
+      throw CustomError.internalError('Se produjo un error al crear plan')
     }
     if (!plan.name) {
-      throw CustomError('Es necesario enivar el nombre del plan').badRequest()
+      throw CustomError.badRequest('Es necesario enivar el nombre del plan')
     }
     if (!plan.price) {
-      throw CustomError('Es necesario enviar el precio del plan').badRequest()
+      throw CustomError.badRequest('Es necesario enviar el precio del plan')
     }
     if (
       !plan.weekDays ||
       plan.weekDays.length === 0 ||
       plan.weekDays.length < 0
     ) {
-      throw CustomError(
+      throw CustomError.badRequest(
         'Es necesario enviar los dias activos del plan'
-      ).badRequest()
+      )
     }
     if (!plan.gym) {
-      throw CustomError('Se produjo un error al crear plan').internalError()
+      throw CustomError.internalError('Se produjo un error al crear plan')
     }
     // Sanitizamos los datos enviados
     plan.name = plan.name.toLowerCase().trim()

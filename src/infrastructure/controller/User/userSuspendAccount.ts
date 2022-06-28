@@ -23,7 +23,7 @@ async function userSuspendAccount(
       .status(200)
       .send({ ok: true, message: 'Su cuenta ha sido suspendida temporalmente' })
   } catch (err) {
-    next(err)
+    return next(err)
   }
 }
 

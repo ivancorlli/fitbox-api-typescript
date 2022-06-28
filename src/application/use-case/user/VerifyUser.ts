@@ -8,15 +8,19 @@ class VerifyUser {
   }
 
   async start(id: string, verified: boolean) {
-    // Requerimos id
-    if (!id) {
-      throw CustomError('Error al verificar').internalError()
+    try {
+      // Requerimos id
+      if (!id) {
+        throw CustomError.internalError()
+      }
+      // Actualizamos al usuario
+      const userUpdated = await this._UserRepository.updateById(id, {
+        verified
+      })
+      return userUpdated
+    } catch (err) {
+      if (err) throw err
     }
-    // Actualizamos al usuario
-    const userUpdated = await this._UserRepository.updateById(id, {
-      verified
-    })
-    return userUpdated
   }
 }
 export default VerifyUser
