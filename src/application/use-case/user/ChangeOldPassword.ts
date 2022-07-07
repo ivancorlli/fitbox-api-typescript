@@ -1,60 +1,53 @@
+import Customer from '../../../domain/entity/Customer'
+import Gym from '../../../domain/entity/Gym'
+import User from '../../../domain/entity/User'
 import CustomError from '../../../domain/exception/CustomError'
+import ErrorResponse from '../../../domain/object-value/ErrorResponse'
 import HashRepository from '../../../domain/repository/HashRepository'
 import UserRepository from '../../../domain/repository/UserRepository'
+import ValidateUser from '../../validation/ValidateUser'
 
 class ChangeOldPassword {
-  private readonly _UserRepository: UserRepository
-  private readonly _HashRepository: HashRepository
+  private readonly U: UserRepository
+  private readonly H: HashRepository
   constructor(userRepository: UserRepository, hashRepository: HashRepository) {
-    this._UserRepository = userRepository
-    this._HashRepository = hashRepository
+    this.U = userRepository
+    this.H = hashRepository
   }
 
-  async start(id: string, oldPassword: string, newPassword: string) {
-    try {
-      // Requerimos id
-      if (!id) {
-        throw CustomError.internalError('Error al cambiar contraseña')
-      }
-      // Requerimos vieja contrasenia
-      if (!oldPassword) {
-        throw CustomError.badRequest('Es ncesario enviar contraseña anterior')
-      }
-      // Requerimos nueva contrasenia
-      if (!newPassword) {
-        throw CustomError.badRequest('Es ncesario enviar nueva contraseña')
-      }
-      // Buscamos el usuario por id
-      const userFound = await this._UserRepository.getById(id)
-      // Sanitizamos password
-      oldPassword = oldPassword.trim()
-      newPassword = newPassword.trim()
-      // Comparamos las contraseñas
-      const comparedHash = await this._HashRepository.compareHash(
-        // Envaida por el usuario para confirmar identidad
-        oldPassword,
-        // Guardada en base de datos
-        userFound!.password!
-      )
-      // Si las contrasenias no son iguales arrojamos un error
-
-      if (!comparedHash) {
-        throw CustomError.badRequest('La contraseña es incorrecta')
-      }
-      // Creamos un nuevo hash para la nueva cotrasenia
-      const newHash = await this._HashRepository.createHash(newPassword)
-      // Guardamos nueva contrasenia en base de datos
-      const userModified = await this._UserRepository.updateById(
-        userFound!._id,
-        {
-          password: newHash
-        }
-      )
-      // Retornamos el usuario modificado
-      return userModified
-    } catch (err) {
-      if (err) throw err
+  async start(
+    id: string,
+    oldPassword: string,
+    newPassword: string
+  ): Promise<User | Gym | Customer> {
+    // Validamos los datos
+    id = ValidateUser.validateId(id)
+    oldPassword = ValidateUser.validatePassword(oldPassword)
+    newPassword = ValidateUser.validatePassword(newPassword)
+    // Buscamos el usuario por id
+    let userFound = await this.U.getById(id)
+    // Arrojamos error si no encontramos un usuario
+    userFound = ValidateUser.validateUserExistence(userFound!)
+    // Comparamos las contraseñas
+    const comparedHash = await this.H.compareHash(
+      // Envaida por el usuario para confirmar identidad
+      oldPassword,
+      // Guardada en base de datos
+      userFound.password!
+    )
+    // Si las contrasenias no son iguales arrojamos un error
+    if (!comparedHash) {
+      throw CustomError.badRequest(ErrorResponse.IncorrectPassword)
     }
+    // Creamos un nuevo hash para la nueva cotrasenia
+    const newHash = await this.H.createHash(newPassword)
+    // Guardamos nueva contrasenia en base de datos
+    let userModified = await this.U.updateById(userFound._id, {
+      password: newHash
+    })
+    // Arrojamos error si no encontramos un usuario
+    userModified = ValidateUser.validateUserExistence(userModified!)
+    return userModified
   }
 }
 export default ChangeOldPassword

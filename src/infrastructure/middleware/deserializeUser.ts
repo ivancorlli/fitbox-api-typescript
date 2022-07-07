@@ -3,7 +3,7 @@ import { NodeStatus } from '../../config/config'
 import UserAuth from '../../domain/entity/UserAuth'
 import { CookieAge } from '../../domain/object-value/CookieAge'
 import { TokenAge } from '../../domain/object-value/TokenAge'
-import MongoSessionRepository from '../mongo/repository/MongoSessionRepository'
+import DbSessionRepository from '../mongo/repository/DbSessionRepository'
 import TokenRepository from '../utils/token'
 
 async function deserializeUser(
@@ -12,7 +12,7 @@ async function deserializeUser(
   next: NextFunction
 ) {
   // Importamos Repositorio de Session
-  const Session = new MongoSessionRepository()
+  const Session = new DbSessionRepository()
   // Instanciamos el respositorio de Token
   const Token = new TokenRepository()
 

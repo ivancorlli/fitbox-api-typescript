@@ -12,7 +12,7 @@ class DeleteSessionById {
     const sessionDeleted = await this._SessionRepository.deleteById(sid)
     // si no hay sesion, arrojamos error
     if (!sessionDeleted) {
-      throw CustomError.internalError('Error al eliminar session')
+      throw CustomError.internalError('Error al cerrar session')
     }
     return sessionDeleted
   }

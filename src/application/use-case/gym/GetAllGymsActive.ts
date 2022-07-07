@@ -1,3 +1,4 @@
+import Gym from '../../../domain/entity/Gym'
 import { UserStatus } from '../../../domain/object-value/UserStatus'
 import GymRepository from '../../../domain/repository/GymRepository'
 
@@ -7,7 +8,8 @@ class GetAllGymsActive {
     this.GymRepository = gymRepository
   }
 
-  async start() {
+  async start(): Promise<Array<Gym> | null> {
+    // Buscar todos los gimnasios activos
     const gymsFound = await this.GymRepository.filterMany({
       status: UserStatus.Active
     })

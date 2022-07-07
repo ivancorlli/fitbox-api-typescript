@@ -1,42 +1,32 @@
+import Customer from '../../../domain/entity/Customer'
+import Gym from '../../../domain/entity/Gym'
 import User from '../../../domain/entity/User'
-import CustomError from '../../../domain/exception/CustomError'
 import HashRepository from '../../../domain/repository/HashRepository'
 import UserRepository from '../../../domain/repository/UserRepository'
+import ValidateUser from '../../validation/ValidateUser'
 
 class CreateNew {
-  private readonly UserRepository: UserRepository
-  private readonly HashRepository: HashRepository
+  private readonly U: UserRepository
+  private readonly H: HashRepository
   constructor(userRepository: UserRepository, hashRepository: HashRepository) {
-    this.UserRepository = userRepository
-    this.HashRepository = hashRepository
+    this.U = userRepository
+    this.H = hashRepository
   }
 
-  async start(user: User) {
-    try {
-      // Verificamos que envia el id
-      if (!user._id) {
-        throw CustomError.internalError('Error al crear el usuario')
-      }
-      // Verificamos que envia email
-      if (!user.email) {
-        throw CustomError.badRequest('Es necesario enviar un email')
-      }
-      // Verificamos que envia constrasenia
-      if (!user.password) {
-        throw CustomError.badRequest('Es necesario enviar una contraseña')
-      }
-      // Sanitizamos los datos ingresados
-      user.email = user.email.toLowerCase().trim()
-      user.password = user.password.trim()
-      // Hasheamos contrasenia para guardar en DDBB
-      const hashPassword = await this.HashRepository.createHash(user.password)
-      user.password = hashPassword
-      // Creamos el usuario
-      const newUser = await this.UserRepository.save(user)
-      return newUser
-    } catch (err) {
-      if (err) throw err
-    }
+  async start(user: User): Promise<User | Gym | Customer> {
+    // Validamos los datos
+    user._id = ValidateUser.validateId(user._id)
+    user.email = ValidateUser.validateEmail(user.email)
+    user.password = ValidateUser.validatePassword(user.password!)
+    // Sanitizamos los datos ingresados
+    user.email = user.email.toLowerCase().trim()
+    user.password = user.password.trim()
+    // Hasheamos contrasenia para guardar en DDBB
+    const hashPassword = await this.H.createHash(user.password)
+    user.password = hashPassword
+    // Creamos el usuario
+    const newUser = await this.U.create(user)
+    return newUser
   }
 }
 export default CreateNew

@@ -1,57 +1,47 @@
+import Customer from '../../../domain/entity/Customer'
+import Gym from '../../../domain/entity/Gym'
+import User from '../../../domain/entity/User'
 import CustomError from '../../../domain/exception/CustomError'
+import ErrorResponse from '../../../domain/object-value/ErrorResponse'
 import { UserStatus } from '../../../domain/object-value/UserStatus'
 import HashRepository from '../../../domain/repository/HashRepository'
 import UserRepository from '../../../domain/repository/UserRepository'
+import ValidateUser from '../../validation/ValidateUser'
 
 class Login {
-  private readonly _UserRepository: UserRepository
-  private readonly _HashRepository: HashRepository
+  private readonly U: UserRepository
+  private readonly H: HashRepository
   constructor(userRepository: UserRepository, hashRepository: HashRepository) {
-    this._UserRepository = userRepository
-    this._HashRepository = hashRepository
+    this.U = userRepository
+    this.H = hashRepository
   }
 
   // *Este metodo se utiliza para Logear al usuario dentro del sistema
-  async start(email: string, password: string) {
-    try {
-      // Verificamos que envia email
-      if (!email) {
-        throw CustomError.badRequest('Es necesario enviar un email')
-      }
-      // Verificamos que envia constrasenia
-      if (!password) {
-        throw CustomError.badRequest('Es necesario enviar una contraseña')
-      }
-      // Sanitizamos email y passowrd
-      email = email.toLowerCase().trim()
-      password = password.trim()
-      // Buscamos el usuario por su email
-      const userFound = await this._UserRepository.getByEmail(email)
-      // Si no esta verificado no le permitimos ingresar
-      if (!userFound) {
-        throw CustomError.badRequest('Usuario inexistente')
-      }
-      if (!userFound!.verified) {
-        throw CustomError.forbidden('Tu cuenta no esta verificada')
-      }
-      // Si existe el usuairo comparamos contrasenia con el hash guardado
-      if (userFound?.status === UserStatus.Suspended) {
-        throw CustomError.forbidden('Tu cuenta esta suspendida')
-      }
-      const hashCompared = await this._HashRepository.compareHash(
-        password,
-        userFound!.password!
-      )
-      // Si las contraseñas no coinciden se arroja un error
-      if (!hashCompared) {
-        throw CustomError.badRequest('La contraseña es incorrecta')
-      }
-      // Retornamos el usuario encontrado
-      userFound!.password = undefined
-      return userFound
-    } catch (err) {
-      if (err) throw err
+  async start(email: string, password: string): Promise<User | Gym | Customer> {
+    // Validamos los datos
+    email = ValidateUser.validateEmail(email)
+    password = ValidateUser.validatePassword(password)
+    // Buscamos el usuario por su email
+    let userFound = await this.U.filterOne({ email })
+    // Arrojamos error si no encontramos un usuario
+    userFound = ValidateUser.validateUserExistence(userFound!)
+    // Si no esta verificado no le permitimos ingresar
+    if (!userFound.verified) {
+      throw CustomError.forbidden(ErrorResponse.UserNotVerified)
     }
+    // Si la cuenta esta suspendida no le permitimos ingresar
+    if (userFound.status === UserStatus.Suspended) {
+      throw CustomError.forbidden(ErrorResponse.UserSuspended)
+    }
+    // Si existe el usuairo comparamos contrasenia con el hash guardado
+    const hashCompared = await this.H.compareHash(password, userFound.password!)
+    // Verificamos que las contrasenias sean iguales
+    if (!hashCompared) {
+      throw CustomError.badRequest(ErrorResponse.IncorrectPassword)
+    }
+    // Retornamos el usuario encontrado
+    userFound.password = undefined
+    return userFound
   }
 }
 export default Login

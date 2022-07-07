@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 import CreateNew from '../../../application/use-case/session/CreateNew'
 import Session from '../../../domain/entity/Session'
-import MongoSessionRepository from '../../mongo/repository/MongoSessionRepository'
-import MongoUserRepository from '../../mongo/repository/MongoUserRepository'
+import DbSessionRepository from '../../mongo/repository/DbSessionRepository'
+import DbUserRepository from '../../mongo/repository/DbUserRepository'
 import BcryptRepository from '../../utils/hash'
 import { v4 as uuidv4 } from 'uuid'
 import TokenRepository from '../../utils/token'
@@ -13,9 +13,9 @@ import Login from '../../../application/use-case/user/Login'
 
 async function userLogin(req: Request, res: Response, next: NextFunction) {
   // Instanciamos Repositorio de usuario
-  const UserDb = new MongoUserRepository()
+  const UserDb = new DbUserRepository()
   // Instanciamos Repositorio de Session
-  const SessionDb = new MongoSessionRepository()
+  const SessionDb = new DbSessionRepository()
   // Instanciamos el respositorio de HASHEO
   const HashRepository = new BcryptRepository()
   // Instanciamos el respositorio de Token

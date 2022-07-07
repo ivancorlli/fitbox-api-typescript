@@ -12,16 +12,22 @@ const userModel = new Schema<User>(
       unique: true,
       trim: true,
       lowercase: true,
-      required: true
+      required: [true, 'Email requerido'],
+      maxlength: [30, 'El email no puede tener mas de 30 caracteres'],
+      minlength: [5, 'El email debe tener un minimo de 5 caracteres']
     },
     password: {
       type: String,
       trim: true,
-      required: true
+      required: [true, 'Contraseña requerida'],
+      minlength: 6
     },
     status: {
       type: String,
-      enum: [UserStatus.Active, UserStatus.Inactive, UserStatus.Suspended],
+      enum: {
+        values: [UserStatus.Active, UserStatus.Inactive, UserStatus.Suspended],
+        message: '{VALUE} no es un valor valido'
+      },
       default: UserStatus.Active
     },
     verified: {

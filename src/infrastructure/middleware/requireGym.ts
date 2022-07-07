@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
 import { UserRoles } from '../../config/config'
-import MongoGymRepository from '../mongo/repository/MongoGymRepository'
+import DbGymRepository from '../mongo/repository/DbGymRepository'
 
 async function requireGym(req: Request, res: Response, next: NextFunction) {
   // Obtenemos id
   const { uid } = req.user
   // Instanciamos repositorio del gymnasio
-  const Gym = new MongoGymRepository()
+  const Gym = new DbGymRepository()
   try {
     // Buscamos el usuario
     const gym = await Gym.getById(uid)

@@ -1,7 +1,7 @@
 import Plan from '../../../domain/entity/Plan'
-import CustomError from '../../../domain/exception/CustomError'
 import { PlanStatus } from '../../../domain/object-value/PlanStatus'
 import PlanRepository from '../../../domain/repository/PlanRepository'
+import ValidatePlan from '../../validation/ValidatePlan'
 
 class GetPlansEnabledByGymId {
   private readonly PlanRepository: PlanRepository
@@ -10,12 +10,9 @@ class GetPlansEnabledByGymId {
   }
 
   async start(gymId: string): Promise<Array<Plan> | null> {
-    // Arrojar error si no enviamos el gym ID
-    if (!gymId) {
-      throw CustomError.badRequest(
-        'Se produjo un error al encontrar los planes'
-      )
-    }
+    // Validamos datos
+    gymId = ValidatePlan.validateGymOwner(gymId)
+    // Buscamos todos los planes disponibles de un gimnasio
     const plansFound = await this.PlanRepository.filterMany({
       gym: gymId,
       status: PlanStatus.Enable

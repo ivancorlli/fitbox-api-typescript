@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from 'express'
 import { GymPhone } from '../../../domain/entity/Gym'
 
-import MongoGymRepository from '../../mongo/repository/MongoGymRepository'
+import DbGymRepository from '../../mongo/repository/DbGymRepository'
 
 async function gymUpdatePhone(req: Request, res: Response, next: NextFunction) {
   // Instanciamos repositorio de Gimnasio
-  const _Gym = new MongoGymRepository()
+  const _Gym = new DbGymRepository()
   try {
     // obtenemos uid
     const { uid } = req.user

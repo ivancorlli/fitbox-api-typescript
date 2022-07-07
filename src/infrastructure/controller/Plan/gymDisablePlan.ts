@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express'
 import DisablePlan from '../../../application/use-case/plan/DisablePlan'
-import MongoPlanRepository from '../../mongo/repository/MongPlanRepository'
+import DbPlanRepository from '../../mongo/repository/DbPlanRepository'
 
 async function gymDisablePlan(req: Request, res: Response, next: NextFunction) {
   // Instanciamos repositorio de PLAN
-  const _Plan = new MongoPlanRepository()
+  const _Plan = new DbPlanRepository()
   // Instanciamos caso de uso DEHABILITAR PLAN
   const disablePlan = new DisablePlan(_Plan)
   try {

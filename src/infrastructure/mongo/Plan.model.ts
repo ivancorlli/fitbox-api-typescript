@@ -12,38 +12,50 @@ const planModel: Schema = new Schema<Plan>(
       type: String,
       trim: true,
       lowercase: true,
-      required: true
+      required: [true, 'Nombre requerido'],
+      maxlength: 35,
+      minlength: 3
     },
     description: {
       type: String,
-      trim: true
+      trim: true,
+      maxlength: 250
     },
     price: {
       type: Number,
       trim: true,
-      required: true
+      required: [true, 'Precio requerido']
     },
     weekDays: [
       {
         type: String,
-        enum: [
-          WeekDays.Monday,
-          WeekDays.Tuesday,
-          WeekDays.Wednesday,
-          WeekDays.Thursday,
-          WeekDays.Friday,
-          WeekDays.Saturday,
-          WeekDays.Sunday
-        ]
+        enum: {
+          values: [
+            WeekDays.Monday,
+            WeekDays.Tuesday,
+            WeekDays.Wednesday,
+            WeekDays.Thursday,
+            WeekDays.Friday,
+            WeekDays.Saturday,
+            WeekDays.Sunday
+          ],
+          message: '{VALUE} no es un valor valido'
+        },
+        required: [true, 'Dias de la semana requeridos']
       }
     ],
     status: {
       type: String,
-      enum: [PlanStatus.Enable, PlanStatus.Disable]
+      enum: {
+        values: [PlanStatus.Enable, PlanStatus.Disable],
+        message: '{VALUE} no es un valor valido'
+      },
+      default: PlanStatus.Enable
     },
-    gym: {
+    gymOwner: {
       type: String,
-      ref: 'User'
+      ref: 'User',
+      required: [true, 'Gimansio requerido']
     }
   },
 

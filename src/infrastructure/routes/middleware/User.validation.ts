@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { QueryType } from '../../../domain/object-value/QueryType'
+import { QueryUserType } from '../../../domain/object-value/QueryUserType'
 import User from '../../utils/validator/User'
 
 class UserValidator {
@@ -7,8 +7,8 @@ class UserValidator {
     try {
       const result = await User.safeParse(req.body)
       if (!result.success) {
-        const errors = result.error.issues.map((el) => el.message)
-        throw errors
+        const errors = result.error.errors.map((el) => el.message)
+        throw errors[0]
       }
       return next()
     } catch (err) {
@@ -18,7 +18,7 @@ class UserValidator {
 
   async userQueryValidation(req: Request, res: Response, next: NextFunction) {
     const { type } = req.query
-    if (type === QueryType.Gym || type === QueryType.Client) {
+    if (type === QueryUserType.Gym || type === QueryUserType.Client) {
       return next()
     }
     return res.status(400).send({ ok: false, message: 'Parametro Incorrecto' })
@@ -34,13 +34,13 @@ class UserValidator {
       const passwordSchema = await User.pick({ password: true })
       let result = await passwordSchema.safeParse({ password: oldPassword })
       if (!result.success) {
-        const error = result.error.issues[0].message
-        throw error
+        const errors = result.error.errors.map((el) => el.message)
+        throw errors[0]
       }
       result = await passwordSchema.safeParse({ password: newPassword })
       if (!result.success) {
-        const error = result.error.issues[0].message
-        throw error
+        const errors = result.error.errors.map((el) => el.message)
+        throw errors[0]
       }
       req.body.oldPassword = oldPassword.trim()
       req.body.newPassword = newPassword.trim()
@@ -56,8 +56,8 @@ class UserValidator {
       const emailSchema = await User.pick({ email: true })
       const result = await emailSchema.safeParse({ email: newEmail })
       if (!result.success) {
-        const error = result.error.issues[0].message
-        throw error
+        const errors = result.error.errors.map((el) => el.message)
+        throw errors[0]
       }
       req.body.newEmail = newEmail.toLowerCase().trim()
       return next()
@@ -76,8 +76,8 @@ class UserValidator {
       const emailSchema = await User.pick({ email: true })
       const result = await emailSchema.safeParse({ email })
       if (!result.success) {
-        const error = result.error.issues[0].message
-        throw error
+        const errors = result.error.errors.map((el) => el.message)
+        throw errors[0]
       }
       req.body.email = email.toLowerCase().trim()
       return next()

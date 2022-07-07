@@ -12,7 +12,7 @@ export const ServerConfig = {
 // * Configuraciones de base de datos
 export const UserRoles = {
   gym: process.env.GYM_ROLE,
-  client: process.env.CLIENT_ROLE
+  customer: process.env.CUSTOMER_ROLE
 }
 // ----------------------------- //
 // * Configuracion de secrets para diferentes modulos

@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express'
 import DeleteSessionById from '../../../application/use-case/session/DeleteSessionById'
-import MongoSessionRepository from '../../mongo/repository/MongoSessionRepository'
+import DbSessionRepository from '../../mongo/repository/DbSessionRepository'
 
 async function userLogout(req: Request, res: Response, next: NextFunction) {
   // Instanciamos repositorio de la session
-  const Session = new MongoSessionRepository()
+  const Session = new DbSessionRepository()
   // Instanciamos caso de uso ELIMINAR SESION POR ID
   const deleteSession = new DeleteSessionById(Session)
   // ------------------------------------------ //

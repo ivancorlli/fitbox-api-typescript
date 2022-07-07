@@ -8,6 +8,6 @@ interface Plan {
   price: number
   weekDays: Array<WeekDays>
   status: PlanStatus
-  gym: string
+  gymOwner: string
 }
 export default Plan

@@ -1,7 +1,9 @@
 import Plan from '../../../domain/entity/Plan'
 import CustomError from '../../../domain/exception/CustomError'
+import ErrorResponse from '../../../domain/object-value/ErrorResponse'
 import { PlanStatus } from '../../../domain/object-value/PlanStatus'
 import PlanRepository from '../../../domain/repository/PlanRepository'
+import ValidatePlan from '../../validation/ValidatePlan'
 
 class UpdatePlan {
   private readonly PlanRepository: PlanRepository
@@ -9,28 +11,17 @@ class UpdatePlan {
     this.PlanRepository = planRepository
   }
 
-  async start(
-    planId: string,
-    gymId: string,
-    update: Plan
-  ): Promise<Plan | null> {
-    // Arrojamos error si no recibimos id del plan
-    if (!planId) {
-      throw CustomError.internalError('Error al actualizar plan')
-    }
-    // Arrojamos error si no recibimos id del gimnasio
-    if (!gymId) {
-      throw CustomError.internalError('Error al actualizar plan')
-    }
+  async start(planId: string, gymId: string, update: Plan): Promise<Plan> {
+    // Validamos datos
+    planId = ValidatePlan.validateId(planId)
+    gymId = ValidatePlan.validateGymOwner(gymId)
     // Buscamos el plan a actualizar
-    const planFound = await this.PlanRepository.getById(planId)
-    // Arrojamos error si no encontramos ninungo
-    if (!planFound) {
-      throw CustomError.badRequest('No existe el plan solicitado')
-    }
+    let planFound = await this.PlanRepository.getById(planId)
+    // Arrojamos error si no encontramos plan
+    planFound = ValidatePlan.validatePlanExistence(planFound!)
     // Arrojamos error si el plan a actualizar no coincide con el id del gimnasio que lo creo
-    if (planFound.gym !== gymId) {
-      throw CustomError.forbidden('No puedes realizar esta accion')
+    if (planFound.gymOwner !== gymId) {
+      throw CustomError.forbidden(ErrorResponse.UserNotAllow)
     }
     // Arrojamos error si el plan esta desabilitado
     if (planFound.status === PlanStatus.Disable) {
@@ -40,19 +31,24 @@ class UpdatePlan {
     }
     // Sanitizamos los datos a actualizar
     if (update.name) {
-      update.name = update.name.toLowerCase().trim()
+      update.name = ValidatePlan.validateName(update.name)
     }
     if (update.description) {
-      update.description = update.description.toLowerCase().trim()
+      update.description = ValidatePlan.validateDescription(update.description)
     }
     if (!update.weekDays || update.weekDays.length < 1) {
-      update.weekDays = planFound.weekDays
+      update.weekDays = ValidatePlan.validateWeekDays(planFound.weekDays)
     }
-    const planUpdated = await this.PlanRepository.updateById(
+    if (update.weekDays && update.weekDays.length > 0) {
+      update.weekDays = ValidatePlan.validateWeekDays(update.weekDays)
+    }
+    let planUpdated = await this.PlanRepository.updateById(
       planFound._id,
       update,
       { ignoreUndefined: true }
     )
+    // Arrojamos error si no encontramos plan
+    planUpdated = ValidatePlan.validatePlanExistence(planUpdated!)
     return planUpdated
   }
 }

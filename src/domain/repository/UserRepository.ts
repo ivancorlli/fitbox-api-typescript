@@ -1,25 +1,55 @@
+import Client from '../entity/Customer'
 import Gym from '../entity/Gym'
 import User from '../entity/User'
 interface UserRepository {
-  // Crear nuevo y guardar en base de datos
-  save: (user: User) => Promise<User>
-  // Encontrar uno por su email
-  getByEmail: (email: string) => Promise<User | Gym | null>
-  // Encontrar uno por su id
-  getById: (id: string) => Promise<User | Gym | null>
-  // Encontrar todos
-  getAll: () => Promise<Array<User>>
+  // Guardar en base de datos
+  save: (user: unknown) => Promise<User | Gym | Client>
+  // Crear nuevo
+  create: (user: User) => Promise<User | Gym | Client>
   // Actualizar uno por su id
   updateById: (
     id: string,
-    update: User | Gym | object
-  ) => Promise<User | Gym | null>
+    update: User | Gym | Client | object,
+    opts?: object
+  ) => Promise<User | Gym | Client | null>
+  // Actualizar uno por parametros
+  update: (
+    filter: object,
+    update: User | Gym | Client | object,
+    opts?: object
+  ) => Promise<User | Gym | Client | null>
+  // Actualizar muchos por parametros
+  updateMany: (
+    filter: object,
+    update: User | Gym | Client | object,
+    opts?: object
+  ) => Promise<Array<User | Gym | Client> | null>
+  // Obtener uno por su id
+  getById: (
+    id: string,
+    populate?: string
+  ) => Promise<User | Gym | Client | null>
+  // Obtener todos
+  getAll: (populate?: string) => Promise<Array<User | Gym | Client> | null>
+  // Obtener uno por parametros
+  filterOne: (
+    filter: object,
+    populate?: string
+  ) => Promise<User | Gym | Client | null>
+  // Obtener varios por parametros
+  filterMany: (
+    filter: object,
+    populate?: string
+  ) => Promise<Array<User | Gym | Client> | null>
   // Eliminar uno por su id
-  deleteById: (id: string) => Promise<void>
-  // Filtrar uno por parametros
-  filterOne: (filter: object) => Promise<User | Gym | null>
-  // Filtrar varios por parametros
-  filterMany: (filter: object) => Promise<Array<User | Gym> | null>
+  deleteById: (id: string) => Promise<User | Gym | Client | null>
+  // Eliminar uno por parametros
+  delete: (filter: object, opts?: object) => Promise<User | Gym | Client | null>
+  // Eliminar muchos por parametros
+  deleteMany: (
+    filter: object,
+    opts?: object
+  ) => Promise<Array<User | Gym | Client> | null>
 }
 
 export default UserRepository

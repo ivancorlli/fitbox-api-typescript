@@ -1,5 +1,5 @@
 /* eslint-disable */
-export const enum QueryType {
+export const enum QueryUserType {
   Gym = '1',
   Client = '2'
 }

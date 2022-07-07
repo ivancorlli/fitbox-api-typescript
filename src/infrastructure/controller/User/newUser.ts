@@ -1,12 +1,12 @@
 import CreateNew from '../../../application/use-case/user/CreateNew'
 import User from '../../../domain/entity/User'
 import { v4 as uuidv4 } from 'uuid'
-import MongoGymRepository from '../../mongo/repository/MongoGymRepository'
+import DbGymRepository from '../../mongo/repository/DbGymRepository'
 import UserRepository from '../../../domain/repository/UserRepository'
 import BcryptRepository from '../../utils/hash'
-import MongoClientRepository from '../../mongo/repository/MongoClientRepository'
+import DbClientRepository from '../../mongo/repository/DbCustomerRepository'
 import CryptRepository from '../../utils/encrypt'
-import { QueryType } from '../../../domain/object-value/QueryType'
+import { QueryUserType } from '../../../domain/object-value/QueryUserType'
 import { TokenAge } from '../../../domain/object-value/TokenAge'
 import EmailExists from '../../../application/use-case/user/EmailExists'
 import TokenRepository from '../../utils/token'
@@ -35,13 +35,13 @@ async function newUser(req: Request, res: Response, next: any) {
 
   let UserDb: UserRepository
   // Definimos el tipo de usuario a crear dependiendo del tipo de query enviada
-  if (type === QueryType.Gym) {
+  if (type === QueryUserType.Gym) {
     // Creamos un Gimnasio
-    UserDb = new MongoGymRepository()
+    UserDb = new DbGymRepository()
   }
-  if (type === QueryType.Client) {
+  if (type === QueryUserType.Client) {
     // Creamos un Cliente
-    UserDb = new MongoClientRepository()
+    UserDb = new DbClientRepository()
   }
   // Instanciamos el caso de uso CREAR NUEVO USUARIO
   const createUser = new CreateNew(UserDb!, HashRepository)
@@ -64,20 +64,20 @@ async function newUser(req: Request, res: Response, next: any) {
     // Creamos codigo para verificacion
     let randomDigit: number
     do {
-      randomDigit = Math.floor(Math.random() * 100000)
-    } while (randomDigit < 10000 && randomDigit < 100000)
+      randomDigit = Math.floor(Math.random() * 1000000)
+    } while (randomDigit < 100000 && randomDigit < 1000000)
     // Encriptamos el id del usuario y el codigo de validacion
     const encripted = Crypt.encrypt({
-      uid: newUser!._id,
+      uid: newUser._id,
       code: randomDigit
     })
     // Creamos el token de verificacion
     const newToken = await Token.newToken(encripted, TokenAge['24Horas'])
     // TODO LLAMAR SUSCRIBER
     // TODO -- ENVIAR EMAIL DE BIENVENIDA
-    await welcome.start(newUser!.email)
+    await welcome.start(newUser.email)
     // TODO -- ENVIAR EMAIL DE VERIFICACION
-    await confirm.start(newUser!.email, randomDigit, newToken)
+    await confirm.start(newUser.email, randomDigit, newToken)
     return res.status(201).send({ ok: true, message: 'Usuario creado' })
   } catch (err) {
     return next(err)

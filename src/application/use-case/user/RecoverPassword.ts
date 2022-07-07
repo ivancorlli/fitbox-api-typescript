@@ -1,43 +1,35 @@
-import CustomError from '../../../domain/exception/CustomError'
+import Customer from '../../../domain/entity/Customer'
+import Gym from '../../../domain/entity/Gym'
+import User from '../../../domain/entity/User'
 import HashRepository from '../../../domain/repository/HashRepository'
 import UserRepository from '../../../domain/repository/UserRepository'
+import ValidateUser from '../../validation/ValidateUser'
 
 class RecoverPassword {
-  private readonly _UserRepository: UserRepository
-  private readonly _HashRepository: HashRepository
+  private readonly U: UserRepository
+  private readonly H: HashRepository
   constructor(userRepository: UserRepository, hashRepository: HashRepository) {
-    this._UserRepository = userRepository
-    this._HashRepository = hashRepository
+    this.U = userRepository
+    this.H = hashRepository
   }
 
-  async start(id: string, newPassword: string) {
-    try {
-      // Requerimos id
-      if (!id) {
-        throw CustomError.internalError('Error al recuperar contraseña')
-      }
-      // Requerimos nueva contrasenia
-      if (!newPassword) {
-        throw CustomError.badRequest('Es ncesario enviar nueva contraseña')
-      }
-      // Buscamos el usuario por id
-      const userFound = await this._UserRepository.getById(id)
-      // Sanitizamos password
-      newPassword = newPassword.trim()
-      // Creamos un nuevo hash para la nueva cotrasenia
-      const newHash = await this._HashRepository.createHash(newPassword)
-      // Guardamos nueva contrasenia en base de datos
-      const userModified = await this._UserRepository.updateById(
-        userFound!._id,
-        {
-          password: newHash
-        }
-      )
-      // Retornamos el usuario modificado
-      return userModified
-    } catch (err) {
-      if (err) throw err
-    }
+  async start(id: string, newPassword: string): Promise<User | Gym | Customer> {
+    // Validamos los datos
+    id = ValidateUser.validateId(id)
+    newPassword = ValidateUser.validatePassword(newPassword)
+    // Buscamos el usuario por id
+    let userFound = await this.U.getById(id)
+    // Arrojamos error si no encontramos usuario
+    userFound = ValidateUser.validateUserExistence(userFound!)
+    // Creamos un nuevo hash para la nueva cotrasenia
+    const newHash = await this.H.createHash(newPassword)
+    // Guardamos nueva contrasenia en base de datos
+    let userModified = await this.U.updateById(userFound._id, {
+      password: newHash
+    })
+    // Arrojamos error si no encontramos usuario
+    userModified = ValidateUser.validateUserExistence(userModified!)
+    return userModified
   }
 }
 export default RecoverPassword

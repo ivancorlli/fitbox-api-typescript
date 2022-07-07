@@ -5,27 +5,75 @@ import { UserRoles } from '../../config/config'
 
 const gymModel = new Schema<Gym>({
   profile: {
-    name: { type: String, default: null },
-    trainings: [{ type: String }],
-    description: { type: String, default: null },
+    name: {
+      type: String,
+      default: null,
+      trim: true,
+      lowercase: true,
+      maxlength: 15,
+      minlength: 3
+    },
+    trainings: [
+      { type: String, trim: true, lowercase: true, maxlength: 10, minlength: 3 }
+    ],
+    description: {
+      type: String,
+      default: null,
+      trim: true,
+      maxlength: 250
+    },
     profileImage: { type: String, default: null }
   },
   direction: {
-    country: { type: String, default: null },
-    city: { type: String, default: null },
-    state: { type: String, default: null },
-    street: { type: String, default: null },
-    streetNumber: { type: Number, default: 0 },
-    postalCode: { type: Number, default: 0 }
+    country: {
+      type: String,
+      default: null,
+      trim: true,
+      lowercase: true,
+      maxlength: 12,
+      minlength: 3
+    },
+    city: {
+      type: String,
+      default: null,
+      trim: true,
+      lowercase: true,
+      maxlength: 12,
+      minlength: 3
+    },
+    state: {
+      type: String,
+      default: null,
+      trim: true,
+      lowercase: true,
+      maxlength: 12,
+      minlength: 3
+    },
+    street: {
+      type: String,
+      default: null,
+      trim: true,
+      lowercase: true,
+      maxlength: 12,
+      minlength: 3
+    },
+    streetNumber: { type: Number, default: 0, trim: true },
+    postalCode: { type: Number, default: 0, trim: true }
   },
   phone: {
-    areaCode: { type: Number, default: 0 },
-    phoneNumber: { type: Number, default: 0 }
+    areaCode: { type: Number, default: 0, trim: true },
+    phoneNumber: { type: Number, default: 0, trim: true }
   },
   configuration: {
-    turnsCapacity: { type: Number, default: 0 },
-    requireMedicalRecord: { type: Boolean, default: false }
-  }
+    turnsCapacity: { type: Number, default: 0, trim: true },
+    requireMedicalRecord: { type: Boolean, default: false, trim: true }
+  },
+  registeredCustomers: [
+    {
+      date: { type: Date },
+      customerId: { type: String, ref: 'User' }
+    }
+  ]
 })
 
 const key: string = UserRoles.gym!

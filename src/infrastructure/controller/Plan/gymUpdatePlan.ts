@@ -2,11 +2,11 @@ import { NextFunction, Request, Response } from 'express'
 import UpdatePlan from '../../../application/use-case/plan/UpdatePlan'
 import Plan from '../../../domain/entity/Plan'
 import { PlanStatus } from '../../../domain/object-value/PlanStatus'
-import MongoPlanRepository from '../../mongo/repository/MongPlanRepository'
+import DbPlanRepository from '../../mongo/repository/DbPlanRepository'
 
 async function gymUpdatePlan(req: Request, res: Response, next: NextFunction) {
   // Instanciar repositorio de PLAN
-  const _Plan = new MongoPlanRepository()
+  const _Plan = new DbPlanRepository()
   // Instanciar caso de uso ACTUALIZAR PLAN
   const updatePlan = new UpdatePlan(_Plan)
   try {
@@ -24,13 +24,11 @@ async function gymUpdatePlan(req: Request, res: Response, next: NextFunction) {
       price,
       weekDays: weekDays && weekDays.length > 0 ? weekDays.split(',') : [],
       status: PlanStatus.Enable,
-      gym: uid
+      gymOwner: uid
     }
     // Actualizamos el plam
-    const planUpdated = await updatePlan.start(planId, uid, update)
-    return res
-      .status(201)
-      .send({ ok: true, message: 'Plan actualizado', planUpdated })
+    await updatePlan.start(planId, uid, update)
+    return res.status(201).send({ ok: true, message: 'Plan actualizado' })
   } catch (err) {
     return next(err)
   }

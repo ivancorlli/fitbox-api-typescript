@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import GetPlansEnabledByGymId from '../../../application/use-case/plan/GetPlansEnabledByGymId'
-import MongoPlanRepository from '../../mongo/repository/MongPlanRepository'
+import DbPlanRepository from '../../mongo/repository/DbPlanRepository'
 
 async function findAllGymPlans(
   req: Request,
@@ -8,7 +8,7 @@ async function findAllGymPlans(
   next: NextFunction
 ) {
   // Insntanciamos repositorio de PLANES
-  const _Plan = new MongoPlanRepository()
+  const _Plan = new DbPlanRepository()
   // Instanciamos caso de uso ENCONTRAR PLAN POR EL ID DEL GIMNASIO
   const findPlan = new GetPlansEnabledByGymId(_Plan)
   try {

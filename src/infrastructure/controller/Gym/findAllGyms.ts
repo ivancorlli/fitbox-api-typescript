@@ -2,11 +2,11 @@ import { NextFunction, Request, Response } from 'express'
 import GetAllGymsActive from '../../../application/use-case/gym/GetAllGymsActive'
 import GymDto from '../../DTO/GymDto'
 
-import MongoGymRepository from '../../mongo/repository/MongoGymRepository'
+import DbGymRepository from '../../mongo/repository/DbGymRepository'
 
 async function findAllGyms(req: Request, res: Response, next: NextFunction) {
   // Instanciamos repositorio GIMNASIO
-  const _Gym = new MongoGymRepository()
+  const _Gym = new DbGymRepository()
   // Instanciamos caso de uso ENCONTRART TODOS LOS GIMNASIOS ACTIVOS
   const getAll = new GetAllGymsActive(_Gym)
   try {
@@ -14,7 +14,7 @@ async function findAllGyms(req: Request, res: Response, next: NextFunction) {
     const response = await getAll.start()
     return res
       .status(200)
-      .send({ ok: true, response: GymDto.multiplesUser(response!) })
+      .send({ ok: true, response: GymDto.multiplesGym(response!) })
   } catch (err) {
     return next(err)
   }

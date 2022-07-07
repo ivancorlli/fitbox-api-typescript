@@ -1,4 +1,5 @@
 import { EmailConfig } from '../../../config/config'
+import CustomError from '../../../domain/exception/CustomError'
 import EmailRepository from '../../../domain/repository/EmailRepository'
 
 class WelcomeEmail {
@@ -8,6 +9,10 @@ class WelcomeEmail {
   }
 
   async start(userEmail: string) {
+    // Arrojamos error si no recibimos el email del usuario
+    if (!userEmail) {
+      throw CustomError.internalError('Email del usuario requerido')
+    }
     const newEmail = await this.E.send({
       from: `Bienvenido a Fitmanager <${EmailConfig.user}>`,
       to: userEmail,

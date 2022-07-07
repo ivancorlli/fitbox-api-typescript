@@ -11,7 +11,6 @@ const userChangeEmail_1 = __importDefault(require("../controller/User/userChange
 const userChangePassword_1 = __importDefault(require("../controller/User/userChangePassword"));
 const userLogin_1 = __importDefault(require("../controller/User/userLogin"));
 const userLogout_1 = __importDefault(require("../controller/User/userLogout"));
-const userSuspendAccount_1 = __importDefault(require("../controller/User/userSuspendAccount"));
 const userVerification_1 = __importDefault(require("../controller/User/userVerification"));
 const requireUser_1 = __importDefault(require("../middleware/requireUser"));
 const User_validation_1 = __importDefault(require("./middleware/User.validation"));
@@ -24,7 +23,6 @@ UserRouter.patch('/reset/:token', resetPassword_1.default);
 UserRouter.post('/', Validation.userQueryValidation, Validation.userRegistration, newUser_1.default);
 UserRouter.use(requireUser_1.default);
 UserRouter.post('/logout', userLogout_1.default);
-UserRouter.patch('/suspend', userSuspendAccount_1.default);
 UserRouter.patch('/change-password', Validation.changeOldPassValidation, userChangePassword_1.default);
 UserRouter.patch('/change-email', Validation.changeEmailValidation, userChangeEmail_1.default);
 exports.default = UserRouter;

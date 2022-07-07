@@ -1,68 +1,68 @@
 import Gym from '../../domain/entity/Gym'
 
 class GymDto {
-  static singlePrivateUser(user: Gym) {
-    if (!user) return {}
+  static singlePrivateGym(gym: Gym) {
+    if (!gym) return {}
     return {
-      id: user._id,
-      email: user.email,
-      status: user.status,
-      verified: user.verified,
-      role: user.role,
+      id: gym._id,
+      email: gym.email,
+      status: gym.status,
+      verified: gym.verified,
+      role: gym.role,
       profile: {
-        name: user.profile.name,
-        trainings: user.profile.trainings,
-        description: user.profile.description,
-        profileImage: user.profile.profileImage
+        name: gym.profile.name,
+        trainings: gym.profile.trainings,
+        description: gym.profile.description,
+        profileImage: gym.profile.profileImage
       },
       direction: {
-        country: user.direction.country,
-        city: user.direction.city,
-        state: user.direction.state,
-        street: user.direction.street,
-        streetNumber: user.direction.streetNumber,
-        postalCode: user.direction.postalCode
+        country: gym.direction.country,
+        city: gym.direction.city,
+        state: gym.direction.state,
+        street: gym.direction.street,
+        streetNumber: gym.direction.streetNumber,
+        postalCode: gym.direction.postalCode
       },
       phone: {
-        areaCode: user.phone.areaCode,
-        phoneNumber: user.phone.phoneNumber
+        areaCode: gym.phone.areaCode,
+        phoneNumber: gym.phone.phoneNumber
       },
       configuration: {
-        turnsCapacity: user.configuration.turnsCapacity,
-        requireMedicalRecord: user.configuration.requireMedicalRecord
+        turnsCapacity: gym.configuration.turnsCapacity,
+        requireMedicalRecord: gym.configuration.requireMedicalRecord
       }
     }
   }
 
-  static singlePublicUser(user: Gym) {
-    if (!user) return {}
+  static singlePublicGym(gym: Gym) {
+    if (!gym) return {}
     return {
-      id: user._id,
+      id: gym._id,
       profile: {
-        name: user.profile.name,
-        trainings: user.profile.trainings,
-        description: user.profile.description,
-        profileImage: user.profile.profileImage
+        name: gym.profile.name,
+        trainings: gym.profile.trainings,
+        description: gym.profile.description,
+        profileImage: gym.profile.profileImage
       },
       direction: {
-        country: user.direction.country,
-        city: user.direction.city,
-        state: user.direction.state,
-        street: user.direction.street,
-        streetNumber: user.direction.streetNumber,
-        postalCode: user.direction.postalCode
+        country: gym.direction.country,
+        city: gym.direction.city,
+        state: gym.direction.state,
+        street: gym.direction.street,
+        streetNumber: gym.direction.streetNumber,
+        postalCode: gym.direction.postalCode
       },
       phone: {
-        areaCode: user.phone.areaCode,
-        phoneNumber: user.phone.phoneNumber
+        areaCode: gym.phone.areaCode,
+        phoneNumber: gym.phone.phoneNumber
       }
     }
   }
 
-  static multiplesUser(users: Gym[]) {
-    if (!users || users.length < 1) return []
-    const userModified = users.map((user) => this.singlePublicUser(user))
-    return userModified
+  static multiplesGym(gyms: Gym[]) {
+    if (!gyms || gyms.length < 1) return []
+    const gymModified = gyms.map((gym) => this.singlePublicGym(gym))
+    return gymModified
   }
 }
 export default GymDto
