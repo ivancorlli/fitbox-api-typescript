@@ -28,11 +28,14 @@ interface SuscriptionRepository {
   // Obtener todos
   getAll: (populate?: string) => Promise<Array<Suscription> | null>
   // Obtener uno por parametros
-  filterOne: (filter: object, populate?: string) => Promise<Suscription | null>
+  filterOne: (
+    filter: object,
+    populate?: string | Array<string>
+  ) => Promise<Suscription | null>
   // Obtener varios por parametros
   filterMany: (
     filter: object,
-    populate?: string
+    populate?: string | Array<string>
   ) => Promise<Array<Suscription> | null>
   // Eliminar uno por su id
   deleteById: (id: string) => Promise<Suscription | null>

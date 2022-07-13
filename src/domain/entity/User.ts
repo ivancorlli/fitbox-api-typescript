@@ -1,4 +1,4 @@
-import { UserStatus } from '../object-value/UserStatus'
+import UserStatus from '../object-value/UserStatus'
 
 interface User {
   _id: string

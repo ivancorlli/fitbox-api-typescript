@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { PaymentType } from '../../../domain/object-value/PaymentType'
+import PaymentType from '../../../domain/object-value/PaymentType'
 
 class CustomerValidator {
   async customerSuscribePlanQueryValidator(

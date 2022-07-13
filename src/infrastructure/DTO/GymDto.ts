@@ -12,8 +12,7 @@ class GymDto {
       profile: {
         name: gym.profile.name,
         trainings: gym.profile.trainings,
-        description: gym.profile.description,
-        profileImage: gym.profile.profileImage
+        description: gym.profile.description
       },
       direction: {
         country: gym.direction.country,
@@ -41,8 +40,7 @@ class GymDto {
       profile: {
         name: gym.profile.name,
         trainings: gym.profile.trainings,
-        description: gym.profile.description,
-        profileImage: gym.profile.profileImage
+        description: gym.profile.description
       },
       direction: {
         country: gym.direction.country,

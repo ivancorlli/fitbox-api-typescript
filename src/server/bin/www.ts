@@ -1,6 +1,7 @@
 import Server from '../app'
 import MongoDb from '../database'
 import { NodeStatus, ServerConfig } from '../../config/config'
+import Worker from '../../infrastructure/events/Worker'
 
 class App {
   static async startOn() {
@@ -12,6 +13,7 @@ class App {
       console.log(`\x1b[36m Entorno === ${env}  \x1b[32m`)
       await newServer.listen()
       await MongoDb.startDatabase(url)
+      await Worker
     } catch (err) {
       console.log(`\x1b[35m  ${err}  \x1b[37m`)
     }

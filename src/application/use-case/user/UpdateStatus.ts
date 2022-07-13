@@ -1,7 +1,7 @@
 import Customer from '../../../domain/entity/Customer'
 import Gym from '../../../domain/entity/Gym'
 import User from '../../../domain/entity/User'
-import { UserStatus } from '../../../domain/object-value/UserStatus'
+import UserStatus from '../../../domain/object-value/UserStatus'
 import UserRepository from '../../../domain/repository/UserRepository'
 import ValidateUser from '../../validation/ValidateUser'
 

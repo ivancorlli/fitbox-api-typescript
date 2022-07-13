@@ -1,6 +1,7 @@
 /* eslint-disable */
-export const enum Gender {
+enum Gender {
   Male = 'male',
   Female = 'female'
 }
+export default Gender
 /* eslint-enable */

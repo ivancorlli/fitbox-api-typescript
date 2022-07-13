@@ -1,8 +1,8 @@
 import Plan from '../../domain/entity/Plan'
 import CustomError from '../../domain/exception/CustomError'
 import ErrorResponse from '../../domain/object-value/ErrorResponse'
-import { PlanStatus } from '../../domain/object-value/PlanStatus'
-import { WeekDays } from '../../domain/object-value/WeekDays'
+import PlanStatus from '../../domain/object-value/PlanStatus'
+import WeekDays from '../../domain/object-value/WeekDays'
 
 class ValidatePlan {
   static validateId(id: string): string {

@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express'
-import { QueryUserType } from '../../../domain/object-value/QueryUserType'
 import User from '../../utils/validator/User'
 
 class UserValidator {
@@ -14,14 +13,6 @@ class UserValidator {
     } catch (err) {
       return res.status(403).send({ ok: false, message: err })
     }
-  }
-
-  async userQueryValidation(req: Request, res: Response, next: NextFunction) {
-    const { type } = req.query
-    if (type === QueryUserType.Gym || type === QueryUserType.Client) {
-      return next()
-    }
-    return res.status(400).send({ ok: false, message: 'Parametro Incorrecto' })
   }
 
   async changeOldPassValidation(

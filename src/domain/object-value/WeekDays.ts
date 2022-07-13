@@ -1,5 +1,5 @@
 /* eslint-disable */
-export const enum WeekDays {
+enum WeekDays {
   Monday = 'monday',
   Tuesday = 'tuesday',
   Wednesday = 'wednesday',
@@ -8,4 +8,5 @@ export const enum WeekDays {
   Saturday = 'saturday',
   Sunday = 'sunday'
 }
+export default WeekDays
 /* eslint-enable */

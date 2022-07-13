@@ -1,7 +1,7 @@
 import User from '../../domain/entity/User'
 import CustomError from '../../domain/exception/CustomError'
 import ErrorResponse from '../../domain/object-value/ErrorResponse'
-import { UserStatus } from '../../domain/object-value/UserStatus'
+import UserStatus from '../../domain/object-value/UserStatus'
 
 class ValidateUser {
   static validateId(id: string): string {

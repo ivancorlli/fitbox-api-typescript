@@ -13,6 +13,7 @@ class RecoverPassword {
     this.H = hashRepository
   }
 
+  // ? Este metodo es publico
   async start(id: string, newPassword: string): Promise<User | Gym | Customer> {
     // Validamos los datos
     id = ValidateUser.validateId(id)

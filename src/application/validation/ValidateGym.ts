@@ -19,5 +19,78 @@ class ValidateGym extends ValidateUser {
     }
     return ctrId
   }
+
+  static validateName(gymName: string): string {
+    // Arrojar error si no es enviado
+    if (!gymName) {
+      throw CustomError.badRequest('Nombre requerido')
+    }
+    // Aanitizamos los datos
+    gymName = gymName.toLowerCase().trim()
+    return gymName
+  }
+
+  static validateDescription(gymDescription: string): string {
+    // Arrojar error si no es enviado
+    if (!gymDescription) {
+      throw CustomError.badRequest('Descripcion requerida')
+    }
+    // Aanitizamos los datos
+    gymDescription = gymDescription.trim()
+    return gymDescription
+  }
+
+  static validateTrainings(gymTrainings: string): Array<string> {
+    // Arrojar error si no es enviado
+    if (!gymTrainings) {
+      throw CustomError.badRequest('Entrenamientos requeridos')
+    }
+    if (gymTrainings.length < 1) {
+      throw CustomError.badRequest('Entrenamientos requeridos')
+    }
+    let trainings = gymTrainings.split(',')
+    trainings = trainings.map((el: string) => el.toLocaleLowerCase().trim())
+    return trainings
+  }
+
+  static validateCountry(gymCountry: string): string {
+    // Arrojar error si no es enviado
+    if (!gymCountry) {
+      throw CustomError.badRequest('Pais requerido')
+    }
+    // Aanitizamos los datos
+    gymCountry = gymCountry.toLowerCase().trim()
+    return gymCountry
+  }
+
+  static validateCity(gymCity: string): string {
+    // Arrojar error si no es enviado
+    if (!gymCity) {
+      throw CustomError.badRequest('Provincia requerida')
+    }
+    // Aanitizamos los datos
+    gymCity = gymCity.toLowerCase().trim()
+    return gymCity
+  }
+
+  static validateState(gymState: string): string {
+    // Arrojar error si no es enviado
+    if (!gymState) {
+      throw CustomError.badRequest('Localidad requerida')
+    }
+    // Aanitizamos los datos
+    gymState = gymState.toLowerCase().trim()
+    return gymState
+  }
+
+  static validateStreet(gymStreet: string): string {
+    // Arrojar error si no es enviado
+    if (!gymStreet) {
+      throw CustomError.badRequest('Calle requerida')
+    }
+    // Aanitizamos los datos
+    gymStreet = gymStreet.toLowerCase().trim()
+    return gymStreet
+  }
 }
 export default ValidateGym

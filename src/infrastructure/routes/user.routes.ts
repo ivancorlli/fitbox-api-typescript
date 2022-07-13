@@ -1,12 +1,11 @@
 import { Router } from 'express'
 import forgotPassword from '../controller/User/forgotPassword'
-import newUser from '../controller/User/newUser'
 import resetPassword from '../controller/User/resetPassword'
-import userChangeEmail from '../controller/User/userChangeEmail'
-import userChangePassword from '../controller/User/userChangePassword'
-import userLogin from '../controller/User/userLogin'
-import userLogout from '../controller/User/userLogout'
-import userVerification from '../controller/User/userVerification'
+import changeEmail from '../controller/User/changeEmail'
+import changePassword from '../controller/User/changePassword'
+import login from '../controller/User/login'
+import logout from '../controller/User/logout'
+import verification from '../controller/User/verification'
 import requireUser from '../middleware/requireUser'
 import UserValidation from './middleware/User.validation'
 const UserRouter = Router()
@@ -14,33 +13,37 @@ const Validation = new UserValidation()
 
 // ? Public Router
 // * Dont require user Athentication
-UserRouter.post('/login', Validation.userRegistration, userLogin)
+
+// Verificar cuenta
+UserRouter.patch('/verify/:token', verification)
+// Ingresar a la aplicacion
+UserRouter.post('/login', Validation.userRegistration, login)
+// Solicitar nueva contrasenia
 UserRouter.post(
   '/forgot-password',
   Validation.forgotPasswordValidation,
   forgotPassword
 )
-UserRouter.patch('/verify/:token', userVerification)
+// Cambiar contrasenia olvidada
 UserRouter.patch('/reset/:token', resetPassword)
-UserRouter.post(
-  '/',
-  Validation.userQueryValidation,
-  Validation.userRegistration,
-  newUser
-)
 
 // ? Private Router
 // * Require user Authentication
-UserRouter.use(requireUser)
-UserRouter.post('/logout', userLogout)
+
+// Cambiar mi contrasenia actual
 UserRouter.patch(
   '/change-password',
+  requireUser,
   Validation.changeOldPassValidation,
-  userChangePassword
+  changePassword
 )
+// Cambiar mi email actual
 UserRouter.patch(
   '/change-email',
+  requireUser,
   Validation.changeEmailValidation,
-  userChangeEmail
+  changeEmail
 )
+// Cerrar Session
+UserRouter.post('/logout', requireUser, logout)
 export default UserRouter

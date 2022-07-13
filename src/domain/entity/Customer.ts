@@ -1,4 +1,4 @@
-import { Gender } from '../object-value/Gender'
+import Gender from '../object-value/Gender'
 import User from './User'
 
 export interface CustomerProfile {
@@ -18,15 +18,10 @@ export interface CustomerPhone {
   areaCode: number
   phoneNumber: number
 }
-interface GymRegisterd {
-  date: Date | number | string
-  gymId: string
-}
 
 interface Customer extends User {
   profile: CustomerProfile
   direction: CustomerDirection
   phone: CustomerPhone
-  gymRegistered: GymRegisterd
 }
 export default Customer

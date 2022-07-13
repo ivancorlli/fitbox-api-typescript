@@ -3,6 +3,6 @@ import findAllDays from '../controller/Day/findAllDays'
 
 const DayRouter = Router()
 // ? Public Router
-DayRouter.get('/all', findAllDays)
+DayRouter.get('/', findAllDays)
 
 export default DayRouter

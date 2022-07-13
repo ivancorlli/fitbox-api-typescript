@@ -3,9 +3,9 @@ import PlanRepository from '../../../domain/repository/PlanRepository'
 import ValidatePlan from '../../validation/ValidatePlan'
 
 class CreateNew {
-  private readonly PlanRepository: PlanRepository
+  private readonly P: PlanRepository
   constructor(planRepository: PlanRepository) {
-    this.PlanRepository = planRepository
+    this.P = planRepository
   }
 
   async start(plan: Plan): Promise<Plan> {
@@ -16,7 +16,7 @@ class CreateNew {
     plan.weekDays = ValidatePlan.validateWeekDays(plan.weekDays)
     plan.gymOwner = ValidatePlan.validateGymOwner(plan.gymOwner)
     // Creamos un nuevo plam
-    const newPlan = await this.PlanRepository.create(plan)
+    const newPlan = await this.P.create(plan)
     return newPlan
   }
 }

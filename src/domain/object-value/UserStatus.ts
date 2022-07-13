@@ -1,7 +1,8 @@
 /* eslint-disable */
-export const enum UserStatus {
+enum UserStatus {
   Active = 'active',
   Inactive = 'inactive',
   Suspended = 'suspended'
 }
+export default UserStatus
 /* eslint-enable */

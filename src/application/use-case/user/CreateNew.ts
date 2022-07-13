@@ -18,9 +18,6 @@ class CreateNew {
     user._id = ValidateUser.validateId(user._id)
     user.email = ValidateUser.validateEmail(user.email)
     user.password = ValidateUser.validatePassword(user.password!)
-    // Sanitizamos los datos ingresados
-    user.email = user.email.toLowerCase().trim()
-    user.password = user.password.trim()
     // Hasheamos contrasenia para guardar en DDBB
     const hashPassword = await this.H.createHash(user.password)
     user.password = hashPassword

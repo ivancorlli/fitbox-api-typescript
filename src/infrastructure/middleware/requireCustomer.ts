@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { UserRoles } from '../../config/config'
-import DbCustomerRepository from '../mongo/repository/DbCustomerRepository'
+import DbCustomerRepository from '../db/DbCustomer'
 
 async function requireCustomer(
   req: Request,

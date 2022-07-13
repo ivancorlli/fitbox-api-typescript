@@ -1,5 +1,5 @@
-import { PaymentType } from '../object-value/PaymentType'
-import { SuscriptionStatus } from '../object-value/SuscriptionStatus'
+import PaymentType from '../object-value/PaymentType'
+import SuscriptionStatus from '../object-value/SuscriptionStatus'
 
 interface Suscription {
   _id: string

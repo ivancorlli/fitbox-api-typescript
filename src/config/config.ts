@@ -1,4 +1,5 @@
 import 'dotenv/config'
+import Redis from 'ioredis'
 
 // * Configuraciones del servidor
 export const NodeStatus = {
@@ -39,4 +40,9 @@ export const EmailConfig = {
   port: process.env.EMAIL_PORT,
   user: process.env.EMAIL_USER,
   pass: process.env.EMAIL_PASS
+}
+
+// * Configuracion del modulo redis
+export const RedisConfig = {
+  connection: new Redis()
 }

@@ -1,16 +1,11 @@
 import { NextFunction, Request, Response } from 'express'
 import { UserRoles } from '../../config/config'
-import DbGymRepository from '../mongo/repository/DbGymRepository'
 
 async function requireGym(req: Request, res: Response, next: NextFunction) {
   // Obtenemos id
-  const { uid } = req.user
-  // Instanciamos repositorio del gymnasio
-  const Gym = new DbGymRepository()
+  const { role } = req.user
   try {
-    // Buscamos el usuario
-    const gym = await Gym.getById(uid)
-    if (!gym || gym.role !== UserRoles.gym) {
+    if (role !== UserRoles.gym) {
       return res.status(403).send({ ok: false, message: 'No tienes permisos' })
     }
     return next()

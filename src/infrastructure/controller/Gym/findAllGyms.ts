@@ -2,11 +2,11 @@ import { NextFunction, Request, Response } from 'express'
 import GetAllGymsActive from '../../../application/use-case/gym/GetAllGymsActive'
 import GymDto from '../../DTO/GymDto'
 
-import DbGymRepository from '../../mongo/repository/DbGymRepository'
+import DbGym from '../../db/DbGym'
 
 async function findAllGyms(req: Request, res: Response, next: NextFunction) {
   // Instanciamos repositorio GIMNASIO
-  const _Gym = new DbGymRepository()
+  const _Gym = new DbGym()
   // Instanciamos caso de uso ENCONTRART TODOS LOS GIMNASIOS ACTIVOS
   const getAll = new GetAllGymsActive(_Gym)
   try {

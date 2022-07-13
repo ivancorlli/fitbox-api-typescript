@@ -4,6 +4,7 @@
   "description": "",
   "main": "www.js",
   "scripts": {
+    "redis": "nodemon dist/infrastructure/events/index.js",
     "server": "nodemon dist/server/bin/www.js",
     "ts": "tsc -w",
     "dev": "concurrently \"npm run ts\" \"npm run server\" "

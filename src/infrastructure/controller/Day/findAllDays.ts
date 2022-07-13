@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { WeekDays } from '../../../domain/object-value/WeekDays'
+import WeekDays from '../../../domain/object-value/WeekDays'
 
 async function findAllDays(req: Request, res: Response, next: NextFunction) {
   try {

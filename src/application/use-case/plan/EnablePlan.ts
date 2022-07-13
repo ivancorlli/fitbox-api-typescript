@@ -1,21 +1,21 @@
 import Plan from '../../../domain/entity/Plan'
 import CustomError from '../../../domain/exception/CustomError'
 import ErrorResponse from '../../../domain/object-value/ErrorResponse'
-import { PlanStatus } from '../../../domain/object-value/PlanStatus'
+import PlanStatus from '../../../domain/object-value/PlanStatus'
 import PlanRepository from '../../../domain/repository/PlanRepository'
 import ValidatePlan from '../../validation/ValidatePlan'
 
 class EnablePlan {
-  private readonly PR: PlanRepository
+  private readonly P: PlanRepository
   constructor(planRepo: PlanRepository) {
-    this.PR = planRepo
+    this.P = planRepo
   }
 
   async start(planId: string, gymId: string): Promise<Plan> {
     // Validamos Datos
     planId = ValidatePlan.validateId(planId)
     gymId = ValidatePlan.validateGymOwner(gymId)
-    let planFound = await this.PR.getById(planId)
+    let planFound = await this.P.getById(planId)
     // Arrojamos error si no encotramos el plan solicitado
     planFound = ValidatePlan.validatePlanExistence(planFound!)
     // Arrojamos error si el plan a actualizar no coincide con el id del gimnasio que lo creo
@@ -26,7 +26,7 @@ class EnablePlan {
     if (planFound.status === PlanStatus.Enable) {
       throw CustomError.badRequest('El plan ya esta habilitado')
     }
-    let planUpdated = await this.PR.updateById(planId, {
+    let planUpdated = await this.P.updateById(planId, {
       status: PlanStatus.Enable
     })
     planUpdated = ValidatePlan.validatePlanExistence(planUpdated!)

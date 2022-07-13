@@ -30,9 +30,7 @@ class ChangeOldPassword {
     userFound = ValidateUser.validateUserExistence(userFound!)
     // Comparamos las contraseñas
     const comparedHash = await this.H.compareHash(
-      // Envaida por el usuario para confirmar identidad
       oldPassword,
-      // Guardada en base de datos
       userFound.password!
     )
     // Si las contrasenias no son iguales arrojamos un error

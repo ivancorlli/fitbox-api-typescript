@@ -2,20 +2,16 @@ import Session from '../../../domain/entity/Session'
 import SessionRepository from '../../../domain/repository/SessionRepository'
 
 class CreateNew {
-  private readonly _SessionRepository: SessionRepository
+  private readonly S: SessionRepository
   constructor(sessionRepository: SessionRepository) {
-    this._SessionRepository = sessionRepository
+    this.S = sessionRepository
   }
 
-  async start(session: Session) {
-    try {
-      // creamos una nueva session
-      const newSession = await this._SessionRepository.create(session)
+  async start(session: Session): Promise<Session> {
+    // creamos una nueva session
+    const newSession = await this.S.create(session)
 
-      return newSession
-    } catch (err) {
-      if (err) throw err
-    }
+    return newSession
   }
 }
 export default CreateNew

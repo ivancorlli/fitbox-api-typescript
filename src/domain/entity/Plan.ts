@@ -1,5 +1,5 @@
-import { WeekDays } from '../object-value/WeekDays'
-import { PlanStatus } from '../object-value/PlanStatus'
+import WeekDays from '../object-value/WeekDays'
+import PlanStatus from '../object-value/PlanStatus'
 
 interface Plan {
   _id: string

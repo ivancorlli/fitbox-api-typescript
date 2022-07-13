@@ -3,7 +3,7 @@ import Gym from '../../../domain/entity/Gym'
 import User from '../../../domain/entity/User'
 import CustomError from '../../../domain/exception/CustomError'
 import ErrorResponse from '../../../domain/object-value/ErrorResponse'
-import { UserStatus } from '../../../domain/object-value/UserStatus'
+import UserStatus from '../../../domain/object-value/UserStatus'
 import HashRepository from '../../../domain/repository/HashRepository'
 import UserRepository from '../../../domain/repository/UserRepository'
 import ValidateUser from '../../validation/ValidateUser'
@@ -16,7 +16,6 @@ class Login {
     this.H = hashRepository
   }
 
-  // *Este metodo se utiliza para Logear al usuario dentro del sistema
   async start(email: string, password: string): Promise<User | Gym | Customer> {
     // Validamos los datos
     email = ValidateUser.validateEmail(email)

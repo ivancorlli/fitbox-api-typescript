@@ -1,7 +1,7 @@
 /* eslint-disable */
-export const enum PlanStatus {
+enum PlanStatus {
   Enable = 'enabled',
   Disable = 'disabled'
 }
-
+export default PlanStatus
 /* eslint-enable */

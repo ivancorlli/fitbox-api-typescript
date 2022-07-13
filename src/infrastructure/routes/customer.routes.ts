@@ -1,21 +1,18 @@
 import { Router } from 'express'
-import customerSuscribeGym from '../controller/Suscription/customerSuscribeGym'
+import newCustomer from '../controller/Customer/newCustomer'
+import updateData from '../controller/Customer/updateData'
 import requireCustomer from '../middleware/requireCustomer'
 import requireUser from '../middleware/requireUser'
-import CustomerValidator from './middleware/Customer.validation'
 
 const CustomerRouter = Router()
-const Validator = new CustomerValidator()
-
-// ? Public Router
 
 // ? Private Router
 // * Require user Authentication
-CustomerRouter.use(requireUser)
-CustomerRouter.use(requireCustomer)
-CustomerRouter.post(
-  '/:planId',
-  Validator.customerSuscribePlanQueryValidator,
-  customerSuscribeGym
-)
+
+// El cliente actualiza sus datos
+CustomerRouter.patch('/data', requireUser, requireCustomer, updateData)
+
+// ? Public Router
+// Crear un nuevo usuario
+CustomerRouter.post('/', newCustomer)
 export default CustomerRouter

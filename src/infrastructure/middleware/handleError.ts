@@ -6,7 +6,9 @@ async function handleError(
   err: CustomError & Error,
   req: Request,
   res: Response,
+  /* eslint-disable */
   next: NextFunction
+  /* eslint-enable */
 ) {
   if (err.name === 'ValidationError') {
     const response = err.message.split(':')
