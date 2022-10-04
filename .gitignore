@@ -10,3 +10,7 @@ dist/
 .env
 /.env
 .env/
+
+.vscode
+.vscode/
+/.vscode

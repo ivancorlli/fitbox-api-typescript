@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import Redis from 'ioredis'
+import { Kafka } from 'kafkajs'
 
 // * Configuraciones del servidor
 export const NodeStatus = {
@@ -8,12 +8,6 @@ export const NodeStatus = {
 export const ServerConfig = {
   port: parseInt(process.env.PORT!),
   dataBase: process.env.DB
-}
-// ----------------------------- //
-// * Configuraciones de base de datos
-export const UserRoles = {
-  gym: process.env.GYM_ROLE,
-  customer: process.env.CUSTOMER_ROLE
 }
 // ----------------------------- //
 // * Configuracion de secrets para diferentes modulos
@@ -42,7 +36,7 @@ export const EmailConfig = {
   pass: process.env.EMAIL_PASS
 }
 
-// * Configuracion del modulo redis
-export const RedisConfig = {
-  connection: new Redis()
-}
+export const kafka = new Kafka({
+  clientId: 'fitmanager',
+  brokers: ['localhost:9092']
+})

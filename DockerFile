@@ -1,0 +1,18 @@
+FROM node:16.15-alpine
+
+WORKDIR /usr/api
+
+# * Primsero copiamos las dependencias por que es lo unico que va a cambiar, de esta manera aprovechamos el cache de docker
+COPY package*.json .
+
+RUN npm install
+
+# * Despues copiamos todo el codigo
+
+COPY . .
+
+RUN npm run build
+
+EXPOSE 5000
+
+CMD [ "npm", "start" ]
