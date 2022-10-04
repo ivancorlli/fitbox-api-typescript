@@ -1,0 +1,9 @@
+node_modules
+dist 
+upload
+export
+converage
+.git
+.tmp 
+.vscode 
+.github

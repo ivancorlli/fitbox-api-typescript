@@ -1,0 +1,54 @@
+// HTTP CODES HELPER 
+
+200 OK => La solicitud ha tenido éxito.
+201 Created => La solicitud ha tenido éxito y se ha creado un nuevo recurso como resultado de ello
+202 Accepted => La solicitud se ha recibido, pero aún no se ha actuado. Es una petición "sin compromiso", lo que significa que no hay manera en HTTP que permite enviar una respuesta asíncrona que indique el resultado del procesamiento de la solicitud. Está pensado para los casos en que otro proceso o servidor maneja la solicitud, o para el procesamiento por lotes.
+
+400 Bad Request => Esta respuesta significa que el servidor no pudo interpretar la solicitud dada una sintaxis inválida.
+401 Unauthorized => Es necesario autenticar para obtener la respuesta solicitada. Esta es similar a 403, pero en este caso, la autenticación es posible.
+403 Forbidden => El cliente no posee los permisos necesarios para cierto contenido, por lo que el servidor está rechazando otorgar una respuesta apropiada.
+404 Not Found => El servidor no pudo encontrar el contenido solicitado. Este código de respuesta es uno de los más famosos dada su alta ocurrencia en la web.
+
+500 Internal Server Error => El servidor ha encontrado una situación que no sabe cómo manejarla.
+502 Bad Gateway => Esta respuesta de error significa que el servidor, mientras trabaja como una puerta de enlace para obtener una respuesta necesaria para manejar la petición, obtuvo una respuesta inválida.
+
+
+
+
+// <domain>.<classification>.<description>.<version>
+
+// Ej
+    analytics.fct.pageviews.0
+    comms.fct.gps.0
+    identity.cdc.users.1
+    notifications.cmd.emails.3
+    notifications.sys.email-cache.0
+
+// FITMANAGER BUISINESS DOMAIN
+    suscription
+    notification
+
+doamin =>
+    These should not include any product names, team names, or service names.
+    Examples of this vary wildly between industries. For example, in a transportation organization, some domains might be:
+        comms: all events relating to device communications
+        fleet: all events relating to trucking fleet management
+        identity: all events relating to identity and auth services
+
+classification =>
+    The classification of data within a Kafka topic tells an end-user how it should be interpreted or used.
+    
+        fct: Fact data is information about a thing that has happened. It is an immutable event at a specific point in time. Examples of this include data from sensors, user activity events, or notifications.
+
+        cdc: Change data capture (CDC) indicates this topic contains all instances of a specific thing and receives all changes to those things. These topics do not capture deltas and can be used to repopulate data stores or caches. These are commonly found as compacted topics within Kafka.
+
+        cmd: Command topics represent operations that occur against the system. This is typically found as the request-response pattern, where you have a verb and a statement. Examples might include UpdateUser and UserUpdated.
+
+        sys: System topics are used for internal topics within a single service. They are operational topics that do not contain any relevant information outside of the owning system. These topics are not meant for public consumption.
+
+description =>
+    The description is arguably the most important part of the name and is the event name that describes the type of data the topic holds. This is the subject of the data, such as customers, invoices, users, payments, etc.
+
+version =>
+    The version of a topic is often the most forgotten section of a proper topic name. As data evolves within a topic, there may be breaking schema changes or a complete change in the format of the data. By versioning topics, you can allow a transitionary period where consumers can switch to the new data without impacting any old consumers.
+    By convention, it is preferred to version all topics and to start them at 0.

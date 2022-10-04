@@ -1,0 +1,29 @@
+version: "2"
+  
+services:
+  mongodb:
+    container_name: mongo
+    image:  mongo:6.0.1-focal
+    restart: always
+    ports:  
+      - 27017:27017
+    volumes:
+      - ./data/mongo:/data/db
+    env_file:
+      - .env
+
+  backend:
+    build: .
+    ports:
+      - 5000:5000
+      - 9229:9229 # !DEBUGGER PORT
+    volumes:
+     - .:/usr/api # named volume
+     - /usr/api/node_modules # anonymous volume for node_modules only
+    command: npm run start:docker
+    env_file:
+      - .env
+    environment:
+      DB: mongodb://mongo/api--dev  
+    depends_on:
+      - mongodb
